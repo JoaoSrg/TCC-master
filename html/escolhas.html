@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Horta - Escolher Plantas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .transition-garden { transition: all 0.3s ease; }
+        .shadow-garden { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .text-garden-secondary { color: #2f4f4f; }
+        .bg-garden-success { background-color: #10b981; }
+        .text-garden-success { color: #10b981; }
+        .border-garden-primary-light { border-color: rgba(100, 116, 139, 0.2); }
+        .text-muted-foreground { color: #6b7280; }
+        .bg-garden-primary { background-color: #10b981; }
+        .bg-garden-primary-light { background-color: rgba(16, 185, 129, 0.1); }
+        
+        .plant-card {
+            background: white;
+            border-radius: 12px;
+            border: 2px solid rgba(100, 116, 139, 0.1);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .plant-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .plant-card.selected {
+            border-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+    </style>
+</head>
+
+<body class="bg-green-50 min-h-screen flex flex-col items-center p-6">
+    <div class="max-w-6xl w-full">
+        <header class="mb-12 text-center">
+            <div class="flex items-center justify-center gap-3">
+                <span class="text-3xl">🌱</span>
+                <h1 class="text-4xl font-bold text-garden-secondary">Escolha Sua Planta</h1>
+            </div>
+            <p class="text-muted-foreground mt-2" id="user-welcome">Selecione uma planta para cultivar</p>
+        </header>
+
+        <div id="plantas-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Cards serão inseridos dinamicamente -->
+        </div>
+
+        <div class="text-center mt-12">
+            <button id="confirm-selection" 
+                class="bg-garden-primary text-white font-semibold py-3 px-8 rounded-lg hover:bg-garden-success/80 transition-garden text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled>
+                Confirmar Seleção
+            </button>
+            <a href="index.html" class="ml-4 text-garden-secondary hover:underline">← Voltar</a>
+        </div>
+
+        <footer class="mt-12 text-center text-muted-foreground">
+            © 2024 Minha Horta. Todos os direitos reservados.
+        </footer>
+    </div>
+
+    <script>
+        // Base de dados de plantas (apenas verduras e temperos)
+        const plantasData = {
+            verduras: [
+                {
+                    id: 'alface',
+                    nome: 'Alface',
+                    imagem: '../img/alface.jfif',
+                    descricao: 'Folha verde fácil de cultivar, ideal para saladas frescas.',
+                    dificuldade: 'Fácil',
+                    luz: '3-4h sol',
+                    rega: 'Diário',
+                    colheita: '45-60 dias',
+                    temperatura: '15-20°C',
+                    categoria: 'verdura'
+                },
+                {
+                    id: 'rucula',
+                    nome: 'Rúcula',
+                    imagem: '../img/rucula.jfif',
+                    descricao: 'Folhagem picante e nutritiva, perfeita para saladas.',
+                    dificuldade: 'Muito Fácil',
+                    luz: '4-6h sol',
+                    rega: 'A cada 2 dias',
+                    colheita: '30-40 dias',
+                    temperatura: '18-25°C',
+                    categoria: 'verdura'
+                },
+                {
+                    id: 'couve',
+                    nome: 'Couve',
+                    imagem: '../img/couve.jfif',
+                    descricao: 'Folhagem verde e robusta, muito versátil na cozinha.',
+                    dificuldade: 'Fácil',
+                    luz: '4-6h sol',
+                    rega: 'A cada 2 dias',
+                    colheita: '50-70 dias',
+                    temperatura: '18-24°C',
+                    categoria: 'verdura'
+                },
+                {
+                    id: 'espinafre',
+                    nome: 'Espinafre',
+                    imagem: '../img/espinafre.jfif',
+                    descricao: 'Rico em nutrientes, perfeito para sucos e refogados.',
+                    dificuldade: 'Fácil',
+                    luz: '3-5h sol',
+                    rega: 'Diário',
+                    colheita: '30-45 dias',
+                    temperatura: '15-20°C',
+                    categoria: 'verdura'
+                }
+            ],
+            temperos: [
+                {
+                    id: 'manjericao',
+                    nome: 'Manjericão',
+                    imagem: '../img/majericao.jfif',
+                    descricao: 'Erva aromática perfeita para molhos e temperos.',
+                    dificuldade: 'Fácil',
+                    luz: '4-6h sol',
+                    rega: 'Diário',
+                    colheita: '60-90 dias',
+                    temperatura: '20-25°C',
+                    categoria: 'tempero'
+                },
+                {
+                    id: 'salsa',
+                    nome: 'Salsa',
+                    imagem: '../img/salsa.jfif',
+                    descricao: 'Erva aromática versátil para diversos pratos.',
+                    dificuldade: 'Fácil',
+                    luz: '4-6h sol',
+                    rega: 'A cada 2 dias',
+                    colheita: '60-80 dias',
+                    temperatura: '18-24°C',
+                    categoria: 'tempero'
+                },
+                {
+                    id: 'cebolinha',
+                    nome: 'Cebolinha',
+                    imagem: '../img/cebolinha.jfif',
+                    descricao: 'Tempero versátil para saladas, sopas e omeletes.',
+                    dificuldade: 'Fácil',
+                    luz: '4-6h sol',
+                    rega: 'Diário',
+                    colheita: '50-70 dias',
+                    temperatura: '15-25°C',
+                    categoria: 'tempero'
+                },
+                {
+                    id: 'alecrim',
+                    nome: 'Alecrim',
+                    imagem: '../img/alecrim.jfif',
+                    descricao: 'Arbusto aromático resistente para carnes e assados.',
+                    dificuldade: 'Moderado',
+                    luz: '6h sol',
+                    rega: 'A cada 4 dias',
+                    colheita: '90-120 dias',
+                    temperatura: '18-25°C',
+                    categoria: 'tempero'
+                }
+            ]
+        };
+
+        let selectedPlant = null;
+        let userData = {};
+
+        function loadPlantas() {
+            // Obtém os dados da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const dataParam = urlParams.get('data');
+            
+            if (!dataParam) {
+                document.getElementById('plantas-container').innerHTML = 
+                    '<p class="text-center text-muted-foreground col-span-3">Dados não encontrados. Volte à página anterior.</p>';
+                return;
+            }
+
+            try {
+                userData = JSON.parse(decodeURIComponent(dataParam));
+                
+                // Atualiza saudação
+                document.getElementById('user-welcome').textContent = 
+                    `Olá ${userData.nome}! Selecione uma planta para cultivar`;
+                
+                // Filtra plantas baseado nas categorias selecionadas
+                const plantasRecomendadas = [];
+                
+                if (userData.categorias.temperos) {
+                    plantasRecomendadas.push(...plantasData.temperos);
+                }
+                if (userData.categorias.verduras) {
+                    plantasRecomendadas.push(...plantasData.verduras);
+                }
+                
+                // Renderiza as plantas
+                const container = document.getElementById('plantas-container');
+                container.innerHTML = '';
+                
+                plantasRecomendadas.forEach(planta => {
+                    const card = `
+                        <div class="plant-card" data-plant-id="${planta.id}">
+                            <div class="flex items-center justify-between mb-3">
+                                <h3 class="text-xl font-bold text-garden-secondary">${planta.nome}</h3>
+                                <span class="bg-garden-success/20 text-garden-success px-2 py-1 rounded-full text-xs font-medium">
+                                    ${planta.categoria}
+                                </span>
+                            </div>
+                            <div class="w-full h-48 bg-gray-200 rounded-lg mb-4 flex items-center justify-center text-gray-500">
+                                [Imagem: ${planta.nome}]
+                            </div>
+                            <p class="text-muted-foreground mb-4 text-sm leading-relaxed">${planta.descricao}</p>
+                            <div class="grid grid-cols-2 gap-3 text-sm">
+                                <div class="flex items-center gap-2"><span>☀️</span><span class="text-muted-foreground">${planta.luz}</span></div>
+                                <div class="flex items-center gap-2"><span>💧</span><span class="text-muted-foreground">${planta.rega}</span></div>
+                                <div class="flex items-center gap-2"><span>⏱️</span><span class="text-muted-foreground">${planta.colheita}</span></div>
+                                <div class="flex items-center gap-2"><span>🌡️</span><span class="text-muted-foreground">${planta.temperatura}</span></div>
+                            </div>
+                            <div class="mt-4 text-center">
+                                <span class="text-xs text-garden-success font-medium">${planta.dificuldade}</span>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += card;
+                });
+
+                // Adiciona event listeners para seleção
+                document.querySelectorAll('.plant-card').forEach(card => {
+                    card.addEventListener('click', function() {
+                        // Remove seleção anterior
+                        document.querySelectorAll('.plant-card').forEach(c => {
+                            c.classList.remove('selected');
+                        });
+                        
+                        // Adiciona seleção atual
+                        this.classList.add('selected');
+                        selectedPlant = this.getAttribute('data-plant-id');
+                        
+                        // Habilita o botão de confirmação
+                        document.getElementById('confirm-selection').disabled = false;
+                    });
+                });
+
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+                document.getElementById('plantas-container').innerHTML = 
+                    '<p class="text-center text-muted-foreground col-span-3">Erro ao carregar os dados.</p>';
+            }
+        }
+
+        function confirmSelection() {
+            if (!selectedPlant) {
+                alert('Por favor, selecione uma planta.');
+                return;
+            }
+
+            // Prepara dados para enviar para dashboard
+            const selectionData = {
+                usuario: userData,
+                plantaSelecionada: selectedPlant,
+                dataSelecao: new Date().toISOString(),
+                timestamp: Date.now()
+            };
+
+            // Aqui você enviaria os dados para a dashboard
+            console.log('Dados para dashboard:', selectionData);
+            
+            // Simula envio para dashboard (substitua por sua API)
+            enviarParaDashboard(selectionData);
+            
+            // Redireciona ou mostra mensagem de sucesso
+            alert(`Planta ${selectedPlant} selecionada com sucesso! Dados enviados para a dashboard.`);
+            
+            // Aqui você pode redirecionar para a próxima página
+            // window.location.href = 'dashboard.html';
+        }
+
+        function enviarParaDashboard(data) {
+            // Simulação de envio para API
+            // Substitua por sua implementação real
+            fetch('/api/selecao-planta', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Sucesso:', data);
+            })
+            .catch((error) => {
+                console.error('Erro:', error);
+            });
+        }
+
+        // Event listeners
+        document.getElementById('confirm-selection').addEventListener('click', confirmSelection);
+        
+        // Carrega as plantas quando a página é carregada
+        document.addEventListener('DOMContentLoaded', loadPlantas);
+    </script>
+</body>
+</html>

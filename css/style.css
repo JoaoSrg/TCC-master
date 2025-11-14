@@ -1,0 +1,140 @@
+:root {
+    --background: 120 20% 98%;
+    --foreground: 140 10% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 140 10% 15%;
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 120 15% 96%;
+    --secondary-foreground: 140 10% 25%;
+    --muted: 120 10% 95%;
+    --muted-foreground: 140 5% 55%;
+    --accent: 142 45% 88%;
+    --accent-foreground: 140 10% 25%;
+    --border: 120 15% 88%;
+    --input: 120 15% 94%;
+    --ring: 142 76% 36%;
+    --garden-primary: 142 76% 36%;
+    --garden-primary-light: 142 45% 88%;
+    --garden-secondary: 120 60% 25%;
+    --garden-earth: 30 25% 65%;
+    --garden-earth-light: 30 15% 85%;
+    --garden-success: 120 100% 25%;
+    --garden-warning: 45 95% 55%;
+    --gradient-hero: linear-gradient(135deg, hsl(142 76% 36%), hsl(142 45% 50%));
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(120 20% 98%));
+    --shadow-garden: 0 4px 20px hsl(142 76% 36% / 0.1);
+    --shadow-card: 0 2px 10px hsl(140 10% 15% / 0.08);
+    --transition-garden: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --radius: 0.5rem;
+}
+
+.bg-garden-primary {
+    background-color: hsl(var(--garden-primary));
+}
+
+.bg-garden-secondary {
+    background-color: hsl(var(--garden-secondary));
+}
+
+.bg-garden-primary-light {
+    background-color: hsl(var(--garden-primary-light));
+}
+
+.text-garden-primary {
+    color: hsl(var(--garden-primary));
+}
+
+.text-garden-secondary {
+    color: hsl(var(--garden-secondary));
+}
+
+.text-garden-success {
+    color: hsl(var(--garden-success));
+}
+
+.text-muted-foreground {
+    color: hsl(var(--muted-foreground));
+}
+
+.border-garden-primary {
+    border-color: hsl(var(--garden-primary));
+}
+
+.border-garden-primary-light {
+    border-color: hsl(var(--garden-primary-light));
+}
+
+.bg-gradient-hero {
+    background: var(--gradient-hero);
+}
+
+.bg-gradient-card {
+    background: var(--gradient-card);
+}
+
+.shadow-garden {
+    box-shadow: var(--shadow-garden);
+}
+
+.shadow-card-garden {
+    box-shadow: var(--shadow-card);
+}
+
+.transition-garden {
+    transition: var(--transition-garden);
+}
+
+.hover\:bg-garden-secondary:hover {
+    background-color: hsl(var(--garden-secondary));
+}
+
+.hover\:bg-garden-primary\/10:hover {
+    background-color: hsl(var(--garden-primary) / 0.1);
+}
+
+.plant-checkbox:checked {
+    border-color: #10b981;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 25px;
+    background-color: #1C2526;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: none;
+}
+
+.button,
+.btn-form,
+.btn-sobre,
+.btn-contato,
+.btn-pagina,
+.btn-clica,
+.btn-clique {
+    background-color: #1C2526;
+    /* Preto */
+    color: #B8860B;
+    /* Dourado */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.btn-sobre:hover,
+.btn-contato:hover,
+.btn-pagina:hover,
+.btn-clica:hover,
+.btn-form:hover,
+.btn-clique:hover {
+    background-color: #B8860B;
+    /* Dourado */
+    color: #1C2526;
+    /* Preto */
+}

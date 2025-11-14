@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Horta - Guia de Plantio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .transition-garden {
+            transition: all 0.3s ease;
+        }
+
+        .shadow-garden {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .text-garden-secondary {
+            color: #2f4f4f;
+        }
+
+        .bg-garden-success {
+            background-color: #10b981;
+        }
+
+        .text-garden-success {
+            color: #10b981;
+        }
+
+        .border-garden-primary-light {
+            border-color: rgba(100, 116, 139, 0.2);
+        }
+
+        .text-muted-foreground {
+            color: #6b7280;
+        }
+
+        .bg-garden-primary {
+            background-color: #10b981;
+        }
+
+        .bg-garden-primary-light {
+            background-color: rgba(16, 185, 129, 0.1);
+        }
+
+        .step-card {
+            background: white;
+            border-radius: 12px;
+            border: 2px solid rgba(100, 116, 139, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .step-card.completed {
+            border-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+
+        .step-card.locked {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .step-card.completed .step-number {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #10b981;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .checkmark {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkmark.checked {
+            background-color: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        .material-icon {
+            font-size: 1.25rem;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+
+<body class="bg-green-50 min-h-screen flex flex-col items-center p-6">
+    <div class="max-w-4xl w-full">
+        <header class="mb-8 text-center">
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <span class="text-4xl">🌱</span>
+                <h1 class="text-4xl font-bold text-garden-secondary">Guia de Plantio</h1>
+            </div>
+            <div id="plant-info" class="bg-white rounded-lg p-6 shadow-garden">
+                <h2 class="text-2xl font-bold text-garden-secondary mb-2" id="plant-name">Carregando...</h2>
+                <p class="text-muted-foreground" id="plant-description"></p>
+            </div>
+        </header>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div id="steps-container" class="space-y-4">
+            <!-- Passos serão inseridos dinamicamente -->
+        </div>
+
+        <div class="text-center mt-12">
+            <button id="finish-planting"
+                class="bg-garden-primary text-white font-semibold py-3 px-8 rounded-lg hover:bg-garden-success/80 transition-garden text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled>
+                🌟 Finalizar Plantio
+            </button>
+            <a href="escolher-plantas.html" class="ml-4 text-garden-secondary hover:underline">← Voltar</a>
+        </div>
+
+        <footer class="mt-12 text-center text-muted-foreground">
+            © 2024 Minha Horta. Todos os direitos reservados.
+        </footer>
+    </div>
+
+    <script>
+        // Base de dados de guias de plantio
+        const plantingGuides = {
+            // VERDURAS
+            'alface': {
+                nome: 'Alface',
+                descricao: 'Folha verde fácil de cultivar, ideal para saladas frescas.',
+                passos: [
+                    {
+                        titulo: 'Preparação do Solo',
+                        descricao: 'Prepare um solo bem drenado e rico em matéria orgânica. Misture terra vegetal com composto orgânico.',
+                        duracao: '30 minutos',
+                        materiais: ['Vaso ou canteiro', 'Terra vegetal', 'Compósito orgânico', 'Pá pequena']
+                    },
+                    {
+                        titulo: 'Plantio das Sementes',
+                        descricao: 'Faça pequenas covas de 0,5cm de profundidade, coloque 2-3 sementes em cada e cubra levemente com terra.',
+                        duracao: '20 minutos',
+                        materiais: ['Sementes de alface', 'Regador']
+                    },
+                    {
+                        titulo: 'Rega Inicial',
+                        descricao: 'Regue suavemente para umedecer o solo sem encharcar. Mantenha o solo úmido nos primeiros dias.',
+                        duracao: '10 minutos',
+                        materiais: ['Regador com água']
+                    },
+
+                ]
+            },
+            'rucula': {
+                nome: 'Rúcula',
+                descricao: 'Folhagem picante e nutritiva, perfeita para saladas.',
+                passos: [
+                    {
+                        titulo: 'Preparação do Solo',
+                        descricao: 'Use solo leve e bem drenado. A rúcula prefere solos com pH neutro.',
+                        duracao: '25 minutos',
+                        materiais: ['Vaso ou canteiro', 'Terra vegetal', 'Areia para drenagem']
+                    },
+                    {
+                        titulo: 'Plantio das Sementes',
+                        descricao: 'Espalhe as sementes uniformemente e cubra com fina camada de terra. Não enterre profundamente.',
+                        duracao: '15 minutos',
+                        materiais: ['Sementes de rúcula', 'Regador']
+                    },
+                    {
+                        titulo: 'Rega Inicial',
+                        descricao: 'Regue com cuidado para não deslocar as sementes. Solo deve ficar úmido mas não encharcado.',
+                        duracao: '10 minutos',
+                        materiais: ['Regador com água']
+                    },
+
+                ]
+            },
+            'couve': {
+                nome: 'Couve',
+                descricao: 'Folhagem verde e robusta, muito versátil na cozinha.',
+                passos: [
+                    {
+                        titulo: 'Preparação do Solo',
+                        descricao: 'Solo profundo e rico em nutrientes. Adicione bastante composto orgânico.',
+                        duracao: '35 minutos',
+                        materiais: ['Vaso grande ou canteiro', 'Terra vegetal', 'Compósito orgânico', 'Pá']
+                    },
+                    {
+                        titulo: 'Plantio das Mudas',
+                        descricao: 'Plante mudas com espaçamento de 50cm entre elas. Enterre até a base das primeiras folhas.',
+                        duracao: '30 minutos',
+                        materiais: ['Mudas de couve', 'Regador']
+                    },
+                    {
+                        titulo: 'Rega Inicial',
+                        descricao: 'Regue abundantemente após o plantio. A couve precisa de solo sempre úmido.',
+                        duracao: '15 minutos',
+                        materiais: ['Regador com água']
+                    },
+
+                ]
+            },
+            // TEMPEROS
+            'manjericao': {
+                nome: 'Manjericão',
+                descricao: 'Erva aromática perfeita para molhos e temperos.',
+                passos: [
+                    {
+                        titulo: 'Preparação do Solo',
+                        descricao: 'Solo leve, bem drenado e rico em matéria orgânica. pH entre 6.0 e 7.5.',
+                        duracao: '25 minutos',
+                        materiais: ['Vaso com furos', 'Terra vegetal', 'Areia', 'Compósito']
+                    },
+                    {
+                        titulo: 'Plantio das Sementes/Mudas',
+                        descricao: 'Plante sementes superficiais ou mudas com espaçamento de 20cm. Não enterre profundamente.',
+                        duracao: '20 minutos',
+                        materiais: ['Sementes ou mudas de manjericão', 'Regador']
+                    },
+                    {
+                        titulo: 'Rega Inicial',
+                        descricao: 'Regue moderadamente. Manjericão não gosta de solo encharcado.',
+                        duracao: '10 minutos',
+                        materiais: ['Regador com água']
+                    },
+
+                ]
+            },
+            'salsa': {
+                nome: 'Salsa',
+                descricao: 'Erva aromática versátil para diversos pratos.',
+                passos: [
+                    {
+                        titulo: 'Preparação do Solo',
+                        descricao: 'Solo fértil, bem drenado e rico em matéria orgânica. pH neutro a levemente alcalino.',
+                        duracao: '20 minutos',
+                        materiais: ['Vaso ou canteiro', 'Terra vegetal', 'Compósito orgânico']
+                    },
+                    {
+                        titulo: 'Plantio das Sementes',
+                        descricao: 'Semeie superficialmente e cubra com fina camada de terra. A salsa tem germinação lenta.',
+                        duracao: '15 minutos',
+                        materiais: ['Sementes de salsa', 'Regador']
+                    },
+                    {
+                        titulo: 'Rega Inicial',
+                        descricao: 'Mantenha o solo constantemente úmido durante a germinação.',
+                        duracao: '10 minutos',
+                        materiais: ['Regador com água']
+                    },
+
+                ]
+            },
+            'cebolinha': {
+                nome: 'Cebolinha',
+                descricao: 'Tempero versátil para saladas, sopas e omeletes.',
+                passos: [
+                    {
+                        titulo: 'Preparação do Solo',
+                        descricao: 'Solo bem drenado e rico em matéria orgânica. Pode ser plantada em vasos pequenos.',
+                        duracao: '20 minutos',
+                        materiais: ['Vaso pequeno', 'Terra vegetal', 'Compósito']
+                    },
+                    {
+                        titulo: 'Plantio das Mudas/Sementes',
+                        descricao: 'Plante mudas divididas ou sementes com espaçamento de 10cm.',
+                        duracao: '15 minutos',
+                        materiais: ['Mudas ou sementes de cebolinha', 'Regador']
+                    },
+                    {
+                        titulo: 'Rega Inicial',
+                        descricao: 'Regue bem após o plantio e mantenha o solo úmido.',
+                        duracao: '10 minutos',
+                        materiais: ['Regador com água']
+                    },
+
+                ]
+            },
+            'alecrim': {
+                nome: 'Alecrim',
+                descricao: 'Arbusto aromático resistente para carnes e assados.',
+                passos: [
+                    {
+                        titulo: 'Preparação do Solo',
+                        descricao: 'Solo bem drenado, preferencialmente arenoso. Não precisa de muita matéria orgânica.',
+                        duracao: '20 minutos',
+                        materiais: ['Vaso com boa drenagem', 'Terra arenosa', 'Areia']
+                    },
+                    {
+                        titulo: 'Plantio das Mudas',
+                        descricao: 'Plante mudas com espaçamento de 30cm. Alecrim prefere não ser transplantado.',
+                        duracao: '25 minutos',
+                        materiais: ['Mudas de alecrim', 'Regador']
+                    },
+                    {
+                        titulo: 'Rega Inicial',
+                        descricao: 'Regue moderadamente após o plantio. Alecrim tolera solo seco.',
+                        duracao: '10 minutos',
+                        materiais: ['Regador com água']
+                    },
+
+                ]
+            }
+        };
+
+        let currentPlant = '';
+        let completedSteps = 0;
+        let totalSteps = 0;
+
+        function loadPlantingGuide() {
+            // Obtém a planta selecionada da URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const plantId = urlParams.get('plant');
+
+            if (!plantId || !plantingGuides[plantId]) {
+                document.getElementById('plant-name').textContent = 'Planta não encontrada';
+                document.getElementById('plant-description').textContent = 'Volte e selecione uma planta válida.';
+                return;
+            }
+
+            currentPlant = plantId;
+            const guide = plantingGuides[plantId];
+
+            // Atualiza informações da planta
+            document.getElementById('plant-name').textContent = guide.nome;
+            document.getElementById('plant-description').textContent = guide.descricao;
+
+            // Renderiza os passos
+            totalSteps = guide.passos.length;
+            renderSteps(guide.passos);
+
+            // Atualiza progresso
+            updateProgress();
+        }
+
+        function renderSteps(passos) {
+            const container = document.getElementById('steps-container');
+            container.innerHTML = '';
+
+            passos.forEach((passo, index) => {
+                const stepNumber = index + 1;
+                const isLocked = index > 0; // Primeiro passo sempre liberado
+
+                const stepHTML = `
+                    <div class="step-card ${isLocked ? 'locked' : ''}" id="step-${stepNumber}">
+                        <div class="flex items-start">
+                            <div class="step-number">${stepNumber}</div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h3 class="text-xl font-semibold text-garden-secondary">${passo.titulo}</h3>
+                                    <div class="checkmark" data-step="${stepNumber}">
+                                        ${!isLocked ? '✓' : ''}
+                                    </div>
+                                </div>
+                                <p class="text-muted-foreground mb-4">${passo.descricao}</p>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                    <div>
+                                        <strong class="text-garden-secondary">⏱️ Duração:</strong>
+                                        <span class="text-muted-foreground ml-2">${passo.duracao}</span>
+                                    </div>
+                                    <div>
+                                        <strong class="text-garden-secondary">🛠️ Materiais Necessários:</strong>
+                                        <div class="text-muted-foreground mt-1">
+                                            ${passo.materiais.map(material =>
+                    `<div class="flex items-center mb-1">
+                                                    <span class="material-icon">📌</span>
+                                                    <span>${material}</span>
+                                                </div>`
+                ).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.innerHTML += stepHTML;
+            });
+
+            // Adiciona event listeners aos checkmarks
+            document.querySelectorAll('.checkmark').forEach(checkmark => {
+                if (!checkmark.closest('.step-card.locked')) {
+                    checkmark.addEventListener('click', function () {
+                        const stepNumber = parseInt(this.getAttribute('data-step'));
+                        toggleStepCompletion(stepNumber);
+                    });
+                }
+            });
+        }
+
+        function toggleStepCompletion(stepNumber) {
+            const stepCard = document.getElementById(`step-${stepNumber}`);
+            const checkmark = stepCard.querySelector('.checkmark');
+
+            if (checkmark.classList.contains('checked')) {
+                // Desmarcar
+                checkmark.classList.remove('checked');
+                stepCard.classList.remove('completed');
+                completedSteps--;
+            } else {
+                // Marcar
+                checkmark.classList.add('checked');
+                stepCard.classList.add('completed');
+                completedSteps++;
+
+                // Liberar próximo passo
+                if (stepNumber < totalSteps) {
+                    const nextStepCard = document.getElementById(`step-${stepNumber + 1}`);
+                    nextStepCard.classList.remove('locked');
+                    nextStepCard.querySelector('.checkmark').innerHTML = '✓';
+
+                    // Adiciona event listener ao próximo passo
+                    nextStepCard.querySelector('.checkmark').addEventListener('click', function () {
+                        toggleStepCompletion(stepNumber + 1);
+                    });
+                }
+            }
+
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = (completedSteps / totalSteps) * 100;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+
+            // Habilita botão final se todos os passos estiverem completos
+            const finishButton = document.getElementById('finish-planting');
+            finishButton.disabled = completedSteps !== totalSteps;
+        }
+        function gerarTarefasIniciais(tipo) {
+            const tarefas = {
+                alface: ['Regar hoje', 'Verificar solo'],
+                rucula: ['Regar a cada 2 dias', 'Podar folhas velhas'],
+                couve: ['Regar abundantemente', 'Verificar pragas'],
+                manjericao: ['Regar diariamente', 'Podar flores'],
+                salsa: ['Regar a cada 2 dias', 'Colher ramos externos'],
+                cebolinha: ['Regar regularmente', 'Cortar folhas'],
+                alecrim: ['Regar a cada 4 dias', 'Podar para crescimento'],
+                default: ['Regar planta', 'Verificar luz solar']
+            };
+            return tarefas[tipo] || tarefas.default;
+        }
+
+        function finishPlanting() {
+            if (completedSteps !== totalSteps) {
+                alert('Complete todos os passos antes de finalizar!');
+                return;
+            }
+
+            const guide = plantingGuides[currentPlant];
+
+            // === CRIA A PLANTA NO localStorage ===
+            // const novaPlanta = {
+            //     id: `plant-${Date.now()}`,
+            //     tipo: currentPlant,
+            //     nome: guide.nome,
+            //     imagem: `img/${currentPlant}.jfif`,  // ajusta conforme seu padrão
+            //     dataPlantio: new Date().toISOString(),
+            //     progresso: 0,
+            //     saudavel: true,
+            //     metodo: 'vasos',  // você pode adicionar escolha depois
+            //     tarefasPendentes: gerarTarefasIniciais(currentPlant)
+            // };
+
+            // // Salva no localStorage
+            // let userPlants = [];
+            // const saved = localStorage.getItem('hortaPlants');
+            // if (saved) userPlants = JSON.parse(saved);
+            // userPlants.push(novaPlanta);
+            // localStorage.setItem('hortaPlants', JSON.stringify(userPlants));
+
+            // // Salva usuário (se não existir)
+            // if (!localStorage.getItem('hortaUser')) {
+            //     const userName = prompt('Qual é o seu nome?') || 'Hortelão';
+            //     localStorage.setItem('hortaUser', JSON.stringify({ nome: userName }));
+            // }
+
+            alert(`Parabéns! Você plantou ${guide.nome}!`);
+
+            // === VAI PARA O DASHBOARD ===
+            window.location.href = 'plantacao.html';
+        }
+
+        function enviarParaDashboard(data) {
+            // simula o envio dos dados para a dashboard via API
+            fetch('/api/plantio-concluido', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Plantio registrado:', data);
+
+                })
+                .catch((error) => {
+                    console.error('Erro:', error);
+                });
+        }
+
+
+
+        // Event listeners
+        document.getElementById('finish-planting').addEventListener('click', finishPlanting);
+
+        // Carrega o guia quando a página é carregada
+        document.addEventListener('DOMContentLoaded', loadPlantingGuide);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Horta - Cultive uma vida mais verde</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: #fdfdfd;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .bg-gradient-hero {
+            background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
+        }
+        
+        .transition-garden {
+            transition: all 0.3s ease;
+        }
+        
+        .shadow-garden {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .bg-garden-primary {
+            background-color: #10b981;
+        }
+        
+        .bg-garden-primary:hover {
+            background-color: #0da271;
+        }
+        
+        .text-muted-foreground {
+            color: #6b7280;
+        }
+        
+        .text-garden-secondary {
+            color: #2f4f4f;
+        }
+        
+        .border-garden-primary-light {
+            border-color: rgba(100, 116, 139, 0.2);
+        }
+        
+        /* animacao q faz a tela subir */
+        @keyframes slideUp {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100%); }
+        }
+        
+        .slide-up {
+            animation: slideUp 1s ease forwards;
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 100vh;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+            pointer-events: none;
+        }
+        
+        .page.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+        
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #2e7d32;
+            text-align: center;
+        }
+        
+        .form-subtitle {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #666;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #4caf50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+        
+        .form-button {
+            width: 100%;
+            padding: 1rem;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .form-button:hover {
+            background-color: #388e3c;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option-card {
+            background: white;
+            border-radius: 12px;
+            border: 2px solid rgba(100, 116, 139, 0.1);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        
+        .option-card.selected {
+            border-color: #10b981;
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #10b981;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .back-button {
+            background: none;
+            border: none;
+            color: #10b981;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            color: #0da271;
+            transform: translateX(-5px);
+        }
+        
+        .welcome-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #2e7d32;
+        }
+        
+        .plant-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- pagina 1: tela verde inicial -->
+    <section id="page-hero" class="page active">
+        <div class="min-h-screen flex items-center justify-center bg-gradient-hero overflow-hidden">
+            <div class="absolute inset-0 bg-black/10"></div>
+            <div class="relative z-10 text-center text-white px-6 max-w-4xl mx-auto fade-in">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                    Cultive sua
+                    <span class="text-yellow-300">horta dos sonhos</span>
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 opacity-90 leading-relaxed">
+                    Transforme qualquer espaço em um jardim produtivo. Receba orientações personalizadas,
+                    acompanhe suas plantas e colha os frutos de uma vida mais verde e saudável.
+                </p>
+                <button id="start-button"
+                    class="bg-white text-green-700 hover:bg-gray-100 px-8 py-4 text-lg font-semibold rounded-lg transition-garden shadow-garden inline-block">
+                    🌱 Começar Agora
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!--pagina 2 - colocar o nome-->
+    <section id="page-name" class="page">
+        <div class="min-h-screen bg-green-50 flex items-center justify-center p-6">
+            <div class="max-w-md w-full">
+                <div class="form-container fade-in">
+                    <h2 class="form-title">Qual é o seu nome?</h2>
+                    <p class="form-subtitle">Para personalizarmos sua experiência</p>
+                    <input type="text" id="user-name" class="form-input" placeholder="Digite seu nome">
+                    <button id="submit-name" class="form-button">Continuar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- pagina 3 - -->
+    <section id="page-info" class="page">
+        <div class="min-h-screen bg-green-50 flex flex-col items-center p-6">
+            <div class="max-w-4xl w-full">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                
+                <button id="back-to-name" class="back-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                    </svg>
+                    Voltar
+                </button>
+                
+                <header class="mb-12 text-center fade-in">
+                    <div class="flex items-center justify-center gap-3">
+                        <span class="text-3xl">🌱</span>
+                        <h1 class="text-4xl font-bold text-garden-secondary">Vamos conhecer seu espaço, <span id="user-greeting"></span></h1>
+                    </div>
+                    <p class="text-muted-foreground mt-2">Com essas informações, conseguimos recomendar as melhores plantas para você</p>
+                </header>
+
+                <div class="space-y-8">
+                    <!-- Espaço disponível -->
+                    <div class="fade-in" style="animation-delay: 0.1s">
+                        <h2 class="text-xl font-semibold mb-4 text-garden-secondary">🏠 Espaço disponível</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <label class="option-card">
+                                <input type="radio" name="espaco" value="varanda-pequena" class="mr-2">
+                                <span class="font-semibold">Varanda pequena</span><br>
+                                <span class="text-muted-foreground text-sm">Até 2m²</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="espaco" value="varanda-media" class="mr-2">
+                                <span class="font-semibold">Varanda média</span><br>
+                                <span class="text-muted-foreground text-sm">2-6m²</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="espaco" value="quintal" class="mr-2">
+                                <span class="font-semibold">Quintal</span><br>
+                                <span class="text-muted-foreground text-sm">Mais de 6m²</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="espaco" value="dentro-casa" class="mr-2">
+                                <span class="font-semibold">Dentro de casa</span><br>
+                                <span class="text-muted-foreground text-sm">Janelas e ambientes internos</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- experiencia -->
+                    <div class="fade-in" style="animation-delay: 0.2s">
+                        <h2 class="text-xl font-semibold mb-4 text-garden-secondary">👩‍🌾 Seu nível de experiência</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <label class="option-card">
+                                <input type="radio" name="experiencia" value="iniciante" class="mr-2">
+                                <span class="font-semibold">Iniciante</span><br>
+                                <span class="text-muted-foreground text-sm">Primeira vez cuidando de plantas</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="experiencia" value="basico" class="mr-2">
+                                <span class="font-semibold">Básico</span><br>
+                                <span class="text-muted-foreground text-sm">Já cuidei de algumas plantas</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="experiencia" value="experiente" class="mr-2">
+                                <span class="font-semibold">Experiente</span><br>
+                                <span class="text-muted-foreground text-sm">Tenho bastante experiência com plantas</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- diponibilidde de luz -->
+                    <div class="fade-in" style="animation-delay: 0.3s">
+                        <h2 class="text-xl font-semibold mb-4 text-garden-secondary">☀️ Luz solar disponível</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <label class="option-card">
+                                <input type="radio" name="luz" value="sol-pleno" class="mr-2">
+                                <span class="font-semibold">Sol pleno</span><br>
+                                <span class="text-muted-foreground text-sm">Mais de 6 horas de sol direto</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="luz" value="meia-sombra" class="mr-2">
+                                <span class="font-semibold">Meia sombra</span><br>
+                                <span class="text-muted-foreground text-sm">3-6 horas de sol</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="radio" name="luz" value="sombra" class="mr-2">
+                                <span class="font-semibold">Sombra</span><br>
+                                <span class="text-muted-foreground text-sm">Menos de 3 horas de sol</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- oq quer plantar -->
+                    <div class="fade-in" style="animation-delay: 0.4s">
+                        <h2 class="text-xl font-semibold mb-4 text-garden-secondary">🌿 O que você gostaria de cultivar?</h2>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <label class="option-card">
+                                <input type="checkbox" id="category-temperos" class="w-5 h-5 text-garden-primary" check>
+                                <span>🌿 Temperos</span>
+                            </label>
+                            <label class="option-card">
+                                <input type="checkbox" id="category-verduras" class="w-5 h-5 text-garden-primary" check>
+                                <span>🥬 Verduras</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- btn final -->
+                    <div class="text-center fade-in" style="animation-delay: 0.5s">
+                        <button id="filter-plants"
+                            class="bg-garden-primary text-white font-semibold py-3 px-6 rounded-lg hover:bg-garden-success/80 transition-garden text-lg">
+                            🌱 Ver Minhas Plantas Recomendadas
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // elemento de paginas
+            const pageHero = document.getElementById('page-hero');
+            const pageName = document.getElementById('page-name');
+            const pageInfo = document.getElementById('page-info');
+            
+            // btn de navegacao
+            const startButton = document.getElementById('start-button');
+            const submitNameButton = document.getElementById('submit-name');
+            const backToNameButton = document.getElementById('back-to-name');
+            const filterPlantsButton = document.getElementById('filter-plants');
+            
+            // dados do usuario
+            const userNameInput = document.getElementById('user-name');
+            const userGreeting = document.getElementById('user-greeting');
+            const progressFill = document.getElementById('progress-fill');
+            
+            // opcao de selecao
+            const optionCards = document.querySelectorAll('.option-card');
+            
+            // navegacao entre paginas
+            function navigateTo(page) {
+                document.querySelectorAll('.page').forEach(p => {
+                    p.classList.remove('active');
+                });
+                page.classList.add('active');
+                updateProgressBar(page);
+            }
+            
+            // atualiza a barra de progresso
+            function updateProgressBar(currentPage) {
+                if (currentPage === pageHero) {
+                    progressFill.style.width = '0%';
+                } else if (currentPage === pageName) {
+                    progressFill.style.width = '33%';
+                } else if (currentPage === pageInfo) {
+                    progressFill.style.width = '66%';
+                }
+            }
+            
+            // interatividade dos cards de opcao
+            optionCards.forEach(card => {
+                const input = card.querySelector('input');
+                card.addEventListener('click', function() {
+                    if (input.type === 'radio') {
+                        const groupName = input.getAttribute('name');
+                        document.querySelectorAll(`input[name="${groupName}"]`).forEach(radio => {
+                            radio.closest('.option-card').classList.remove('selected');
+                        });
+                    }
+                    
+                    if (input.type === 'checkbox') {
+                        input.checked = !input.checked;
+                    } else {
+                        input.checked = true;
+                    }
+                    
+                    if (input.checked) {
+                        card.classList.add('selected');
+                    } else {
+                        card.classList.remove('selected');
+                    }
+                });
+            });
+            
+            // eventos dos botoes
+            startButton.addEventListener('click', function() {
+                navigateTo(pageName);
+            });
+            
+            submitNameButton.addEventListener('click', function() {
+                const userName = userNameInput.value.trim();
+                if (userName) {
+                    userGreeting.textContent = userName;
+                    navigateTo(pageInfo);
+                } else {
+                    alert('Por favor, digite seu nome.');
+                }
+            });
+            
+            backToNameButton.addEventListener('click', function() {
+                navigateTo(pageName);
+            });
+            
+            filterPlantsButton.addEventListener('click', function() {
+                // Coleta as informações do usuário
+                const espaco = document.querySelector('input[name="espaco"]:checked');
+                const experiencia = document.querySelector('input[name="experiencia"]:checked');
+                const luz = document.querySelector('input[name="luz"]:checked');
+                const temperos = document.getElementById('category-temperos').checked;
+                const verduras = document.getElementById('category-verduras').checked;
+                
+                // Verifica se todas as informações foram preenchidas
+                if (!espaco || !experiencia || !luz) {
+                    alert('Por favor, preencha todas as informações sobre seu espaço e experiência.');
+                    return;
+                }
+                
+                // Prepara dados para a próxima página
+                const userData = {
+                    nome: userNameInput.value.trim(),
+                    espaco: espaco.value,
+                    experiencia: experiencia.value,
+                    luz: luz.value,
+                    categorias: {
+                        temperos: temperos,
+                        verduras: verduras
+                    }
+                };
+                
+                // Redireciona para a página de seleção de plantas
+                //
+                const queryString = new URLSearchParams({
+                    data: encodeURIComponent(JSON.stringify(userData))
+                }).toString();
+                
+                window.location.href = `opcoes.html?${queryString}`;
+            });
+            
+            // Permite enviar o nome com Enter
+            userNameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    submitNameButton.click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
