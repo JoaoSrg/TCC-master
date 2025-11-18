@@ -318,59 +318,58 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
 
-        function limpar_dados() {
+        function limparDados() {
             localStorage.removeItem('hortaUser');
             localStorage.removeItem('hortaPlants');
             location.reload();
         }
-        document.getElementById('btn-limpar').addEventListener('click', limpar_dados);
+        document.getElementById('btn-limpar').addEventListener('click', limparDados);
 
+        // Base de dados das plantas do usuário
+        let plantasUsuario = [];
+        let usuarioAtual = { nome: "João Silva" };
+        let idPlantaSelecionada = null;
+        let graficoProgresso = null;
 
-        // Base de dados de plantas do usuário
-        let userPlants = [];
-        let currentUser = { nome: "João Silva" };
-        let selectedPlantId = null;
-        let progressChart = null;
-
-        // Base de dados de tarefas por tipo de planta
-        const plantTasks = {
+        // Tarefas por tipo de planta
+        const tarefasPorPlanta = {
             'alface': [
                 { id: 1, nome: 'Regar a planta', frequencia: 'diária', concluida: false },
                 { id: 2, nome: 'Verificar umidade do solo', frequencia: 'diária', concluida: false },
                 { id: 3, nome: 'Observar crescimento', frequencia: 'diária', concluida: false },
-                { id: 4, nome: 'Verificar presença de pragas', frequencia: '2 dias', concluida: false }
+                { id: 4, nome: 'Verificar presença de pragas', frequencia: 'a cada 2 dias', concluida: false }
             ],
             'rucula': [
                 { id: 1, nome: 'Regar moderadamente', frequencia: 'diária', concluida: false },
                 { id: 2, nome: 'Verificar coloração das folhas', frequencia: 'diária', concluida: false },
-                { id: 3, nome: 'Colher folhas maduras', frequencia: '2 dias', concluida: false }
+                { id: 3, nome: 'Colher folhas maduras', frequencia: 'a cada 2 dias', concluida: false }
             ],
             'couve': [
                 { id: 1, nome: 'Regar abundantemente', frequencia: 'diária', concluida: false },
-                { id: 2, nome: 'Verificar necessidade de adubo', frequencia: '3 dias', concluida: false },
+                { id: 2, nome: 'Verificar necessidade de adubo', frequencia: 'a cada 3 dias', concluida: false },
                 { id: 3, nome: 'Inspecionar folhas', frequencia: 'diária', concluida: false }
             ],
             'manjericao': [
                 { id: 1, nome: 'Regar sem encharcar', frequencia: 'diária', concluida: false },
-                { id: 2, nome: 'Podar galhos secos', frequencia: '3 dias', concluida: false },
-                { id: 3, nome: 'Colher folhas para uso', frequencia: '2 dias', concluida: false }
+                { id: 2, nome: 'Podar galhos secos', frequencia: 'a cada 3 dias', concluida: false },
+                { id: 3, nome: 'Colher folhas para uso', frequencia: 'a cada 2 dias', concluida: false }
             ],
             'salsa': [
                 { id: 1, nome: 'Manter solo úmido', frequencia: 'diária', concluida: false },
-                { id: 2, nome: 'Colher ramos externos', frequencia: '2 dias', concluida: false }
+                { id: 2, nome: 'Colher ramos externos', frequencia: 'a cada 2 dias', concluida: false }
             ],
             'cebolinha': [
                 { id: 1, nome: 'Regar regularmente', frequencia: 'diária', concluida: false },
-                { id: 2, nome: 'Cortar folhas para uso', frequencia: '2 dias', concluida: false }
+                { id: 2, nome: 'Cortar folhas para uso', frequencia: 'a cada 2 dias', concluida: false }
             ],
             'alecrim': [
-                { id: 1, nome: 'Regar moderadamente', frequencia: '2 dias', concluida: false },
-                { id: 2, nome: 'Podar para incentivar crescimento', frequencia: '5 dias', concluida: false }
+                { id: 1, nome: 'Regar moderadamente', frequencia: 'a cada 2 dias', concluida: false },
+                { id: 2, nome: 'Podar para incentivar crescimento', frequencia: 'a cada 5 dias', concluida: false }
             ]
         };
 
-        // Informações das plantas
-        const plantInfo = {
+        // Informações gerais das plantas
+        const infoPlanta = {
             'alface': { nome: 'Alface', tipo: 'verdura', diasCrescimento: 60 },
             'rucula': { nome: 'Rúcula', tipo: 'verdura', diasCrescimento: 40 },
             'couve': { nome: 'Couve', tipo: 'verdura', diasCrescimento: 70 },
@@ -380,178 +379,315 @@
             'alecrim': { nome: 'Alecrim', tipo: 'tempero', diasCrescimento: 120 }
         };
 
-        function initDashboard() {
-            loadUserData();
-            updateTime();
-            setInterval(updateTime, 60000);
-            renderPlants();     // ← SÓ AQUI
-            renderCalendar();
-            updateSidebar();
-            setupEventListeners();
+        function inicializarDashboard() {
+            carregarDadosUsuario();
+            atualizarHora();
+            setInterval(atualizarHora, 60000);
+            renderizarPlantas();
+            renderizarCalendario();
+            atualizarBarraLateral();
+            configurarEventos();
         }
 
-        function loadUserData() {
-            const savedUser = localStorage.getItem('hortaUser');
-            const savedPlants = localStorage.getItem('hortaPlants');
+        function carregarDadosUsuario() {
+            const usuarioSalvo = localStorage.getItem('hortaUser');
+            const plantasSalvas = localStorage.getItem('hortaPlants');
 
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
+            if (usuarioSalvo) {
+                usuarioAtual = JSON.parse(usuarioSalvo);
             }
 
-            if (savedPlants && savedPlants !== '[]') {
-                userPlants = JSON.parse(savedPlants);
+            if (plantasSalvas && plantasSalvas !== '[]') {
+                plantasUsuario = JSON.parse(plantasSalvas);
             } else {
-                userPlants = [];
+                plantasUsuario = [];
             }
 
-            // REMOVA renderPlants() daqui!
-            updateUserInfo();
-            // renderPlants(); ← REMOVA!
+            atualizarInfoUsuario();
         }
 
-        function savePlants() {
-            localStorage.setItem('hortaPlants', JSON.stringify(userPlants));
+        function salvarPlantas() {
+            localStorage.setItem('hortaPlants', JSON.stringify(plantasUsuario));
         }
 
-        function updateUserInfo() {
-            document.getElementById('user-name').textContent = currentUser.nome;
-            document.getElementById('user-initial').textContent = currentUser.nome.charAt(0);
+        function atualizarInfoUsuario() {
+            document.getElementById('user-name').textContent = usuarioAtual.nome;
+            document.getElementById('user-initial').textContent = usuarioAtual.nome.charAt(0).toUpperCase();
         }
 
-        function updateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-            document.getElementById('current-time').textContent = timeString;
+        function atualizarHora() {
+            const agora = new Date();
+            const horaFormatada = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('current-time').textContent = horaFormatada;
         }
 
-        function renderPlants() {
+        function renderizarPlantas() {
             const container = document.getElementById('plants-container');
 
-            if (userPlants.length === 0) {
+            if (plantasUsuario.length === 0) {
                 container.innerHTML = `
-                <div class="col-span-3 text-center py-12">
-                    <i class="fas fa-seedling text-6xl text-muted-foreground mb-4"></i>
-                    <h3 class="text-xl font-semibold text-garden-secondary mb-2">Nenhuma planta ainda</h3>
-                    <p class="text-muted-foreground mb-4">Adicione sua primeira planta para começar!</p>
-                </div>
-            `;
+            <div class="col-span-3 text-center py-12">
+                <i class="fas fa-seedling text-6xl text-muted-foreground mb-4"></i>
+                <h3 class="text-xl font-semibold text-garden-secondary mb-2">Nenhuma planta ainda</h3>
+                <p class="text-muted-foreground mb-4">Adicione sua primeira planta para começar!</p>
+            </div>
+        `;
                 return;
             }
 
             container.innerHTML = '';
 
-            userPlants.forEach(plant => {
-                const info = plantInfo[plant.tipo] || { nome: plant.nome, tipo: 'desconhecido', diasCrescimento: 60 };
-                const diasDesdePlantio = Math.floor((new Date() - new Date(plant.dataPlantio)) / (1000 * 60 * 60 * 24));
+            plantasUsuario.forEach(planta => {
+                const info = infoPlanta[planta.tipo] || { nome: planta.nome, tipo: 'desconhecida', diasCrescimento: 60 };
+                const diasDesdePlantio = Math.floor((new Date() - new Date(planta.dataPlantio)) / (1000 * 60 * 60 * 24));
                 const progresso = Math.min(100, Math.floor((diasDesdePlantio / info.diasCrescimento) * 100));
 
-
                 const card = `
-                <div class="plant-card group" data-plant-id="${plant.id}">
-                    <div class="flex justify-between items-start mb-3">
-                        <h3 class="text-xl font-bold text-garden-secondary">${info.nome}</h3>
-                        <span class="bg-garden-success/20 text-garden-success px-2 py-1 rounded-full text-xs font-medium">
-                            ${info.tipo}
-                        </span>
-                    </div>
-
-                    <img src="${plant.imagem}" 
-                        alt="${info.nome}" 
-                        class="w-full h-40 object-cover rounded-lg mb-4" 
-                        onerror="this.src='img/placeholder.png';">
-
-                    <div class="mb-4">  
-                        <div class="flex justify-between text-sm text-muted-foreground mb-1">
-                            <span>Progresso</span>
-                            <span>${progresso}%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: ${progresso}%"></div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 text-sm mb-4">
-                        <div><div class="text-muted-foreground">Plantada há</div><div class="font-semibold">${diasDesdePlantio} dias</div></div>
-                        <div><div class="text-muted-foreground">Saúde</div><div class="font-semibold ${plant.saudavel ? 'text-green-600' : 'text-red-600'}">${plant.saudavel ? 'Boa' : 'Atenção'}</div></div>
-                    </div>
-
-                    <!-- Botão Ver Tarefas -->
-                    <button class="w-full bg-garden-primary text-white py-2 rounded-lg text-sm font-medium hover:bg-garden-success/90 transition open-tasks-btn">
-                        Ver Tarefas
-                    </button>
+            <div class="plant-card group" data-plant-id="${planta.id}">
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="text-xl font-bold text-garden-secondary">${info.nome}</h3>
+                    <span class="bg-garden-success/20 text-garden-success px-2 py-1 rounded-full text-xs font-medium">
+                        ${info.tipo}
+                    </span>
                 </div>
-            `;
 
+                <img src="${planta.imagem}" 
+                    alt="${info.nome}" 
+                    class="w-full h-40 object-cover rounded-lg mb-4" 
+                    onerror="this.src='img/placeholder.png';">
+
+                <div class="mb-4">  
+                    <div class="flex justify-between text-sm text-muted-foreground mb-1">
+                        <span>Progresso</span>
+                        <span>${progresso}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progresso}%"></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+                    <div><div class="text-muted-foreground">Plantada há</div><div class="font-semibold">${diasDesdePlantio} dias</div></div>
+                    <div><div class="text-muted-foreground">Saúde</div><div class="font-semibold ${planta.saudavel ? 'text-green-600' : 'text-red-600'}">${planta.saudavel ? 'Boa' : 'Atenção'}</div></div>
+                </div>
+
+                <button class="w-full bg-garden-primary text-white py-2 rounded-lg text-sm font-medium hover:bg-garden-success/90 transition abrir-tarefas">
+                    Ver Tarefas
+                </button>
+            </div>
+        `;
 
                 container.innerHTML += card;
             });
 
             document.querySelectorAll('.plant-card').forEach(card => {
                 card.addEventListener('click', function () {
-                    const plantId = this.getAttribute('data-plant-id');
-                    openTasksModal(plantId);
+                    const idPlanta = this.getAttribute('data-plant-id');
+                    abrirModalTarefas(idPlanta);
                 });
             });
         }
 
-        function getPendingTasksCount(plantType) {
-            const tasks = plantTasks[plantType] || [];
-            return tasks.filter(task => !task.concluida).length;
-        }
+        function renderizarCalendario() {
+            const calendarioEl = document.getElementById('calendar');
+            const hoje = new Date();
+            const mesAtual = hoje.getMonth();
+            const anoAtual = hoje.getFullYear();
 
-        function renderCalendar() {
-            const calendarEl = document.getElementById('calendar');
-            const today = new Date();
-            const currentMonth = today.getMonth();
-            const currentYear = today.getFullYear();
-
-            const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+            const nomesMeses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
                 "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
-            let calendarHTML = `
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="font-semibold text-garden-secondary">${monthNames[currentMonth]} ${currentYear}</h3>
-            </div>
-            <div class="grid grid-cols-7 gap-1 text-xs text-center text-muted-foreground mb-2">
-                <div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div>
-            </div>
-            <div class="grid grid-cols-7 gap-1">
-        `;
+            let htmlCalendario = `
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-semibold text-garden-secondary">${nomesMeses[mesAtual]} ${anoAtual}</h3>
+        </div>
+        <div class="grid grid-cols-7 gap-1 text-xs text-center text-muted-foreground mb-2">
+            <div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div>
+        </div>
+        <div class="grid grid-cols-7 gap-1">
+    `;
 
-            const firstDay = new Date(currentYear, currentMonth, 1);
-            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            const primeiroDia = new Date(anoAtual, mesAtual, 1);
+            const ultimoDia = new Date(anoAtual, mesAtual + 1, 0);
 
-            for (let i = 0; i < firstDay.getDay(); i++) {
-                calendarHTML += `<div class="calendar-day"></div>`;
+            for (let i = 0; i < primeiroDia.getDay(); i++) {
+                htmlCalendario += `<div class="calendar-day"></div>`;
             }
 
-            for (let day = 1; day <= lastDay.getDate(); day++) {
-                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const hasPlant = userPlants.some(plant => {
-                    const plantDate = new Date(plant.dataPlantio).toISOString().split('T')[0];
-                    return plantDate === dateStr;
+            for (let dia = 1; dia <= ultimoDia.getDate(); dia++) {
+                const dataStr = `${anoAtual}-${String(mesAtual + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+                const temPlanta = plantasUsuario.some(planta => {
+                    const dataPlantio = new Date(planta.dataPlantio).toISOString().split('T')[0];
+                    return dataPlantio === dataStr;
                 });
 
-                const isToday = today.getDate() === day && today.getMonth() === currentMonth && today.getFullYear() === currentYear;
+                const ehHoje = hoje.getDate() === dia && hoje.getMonth() === mesAtual && hoje.getFullYear() === anoAtual;
 
-                calendarHTML += `
-                <div class="calendar-day ${hasPlant ? 'has-plant' : ''} ${isToday ? 'today' : ''}">
-                    ${day}
-                </div>
-            `;
+                htmlCalendario += `
+            <div class="calendar-day ${temPlanta ? 'has-plant' : ''} ${ehHoje ? 'today' : ''}">
+                ${dia}
+            </div>
+        `;
             }
 
-            calendarHTML += `</div>`;
-            calendarEl.innerHTML = calendarHTML;
+            htmlCalendario += `</div>`;
+            calendarioEl.innerHTML = htmlCalendario;
         }
 
-        // === SIDEBAR INTERATIVA ===
-        function updateSidebar() {
-            updateCalendarDropdown();
-            updateTasksDropdown();
-            updateProgressChart();
-            updatePendingTasksCount();
+        function atualizarBarraLateral() {
+            atualizarTarefasPendentes();
+            atualizarContagemTarefas();
+            atualizarGraficoProgresso();
         }
+
+        function atualizarTarefasPendentes() {
+            const lista = document.getElementById('tasks-list-sidebar');
+            lista.innerHTML = '';
+
+            let todasTarefas = [];
+            plantasUsuario.forEach(planta => {
+                const info = infoPlanta[planta.tipo] || { nome: planta.nome };
+                const tarefas = tarefasPorPlanta[planta.tipo] || [];
+                tarefas.forEach(tarefa => {
+                    if (!tarefa.concluida) {
+                        todasTarefas.push({ planta: info.nome, tarefa: tarefa.nome, idPlanta: planta.id, idTarefa: tarefa.id });
+                    }
+                });
+            });
+
+            if (todasTarefas.length === 0) {
+                lista.innerHTML = '<li class="text-muted-foreground italic">Nenhuma tarefa pendente</li>';
+            } else {
+                todasTarefas.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-center justify-between p-1 rounded hover:bg-garden-primary-light transition';
+                    li.innerHTML = `
+                <label class="flex items-center cursor-pointer flex-1">
+                    <input type="checkbox" class="mr-2 accent-garden-success" data-planta="${item.idPlanta}" data-tarefa="${item.idTarefa}">
+                    <span class="text-garden-secondary text-xs">${item.tarefa}</span>
+                </label>
+                <span class="text-xs text-muted-foreground">${item.planta}</span>
+            `;
+                    lista.appendChild(li);
+                });
+
+                lista.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                    cb.addEventListener('change', function () {
+                        const idPlanta = this.dataset.planta;
+                        const idTarefa = parseInt(this.dataset.tarefa);
+                        const planta = plantasUsuario.find(p => p.id === idPlanta);
+                        if (planta) {
+                            const tarefa = tarefasPorPlanta[planta.tipo].find(t => t.id === idTarefa);
+                            if (tarefa) {
+                                tarefa.concluida = this.checked;
+                                atualizarBarraLateral();
+                                renderizarPlantas();
+                            }
+                        }
+                    });
+                });
+            }
+        }
+
+        function atualizarContagemTarefas() {
+            let total = 0;
+            plantasUsuario.forEach(planta => {
+                const tarefas = tarefasPorPlanta[planta.tipo] || [];
+                total += tarefas.filter(t => !t.concluida).length;
+            });
+            document.getElementById('pending-tasks-count').textContent = total;
+        }
+
+        function atualizarGraficoProgresso() {
+            const ctx = document.getElementById('progress-chart')?.getContext('2d');
+            if (!ctx) return;
+
+            const rotulos = plantasUsuario.map(p => infoPlanta[p.tipo]?.nome || p.nome);
+            const dados = plantasUsuario.map(p => {
+                const info = infoPlanta[p.tipo] || { diasCrescimento: 60 };
+                const diasDesdePlantio = Math.floor((new Date() - new Date(p.dataPlantio)) / 86400000);
+                return Math.min(100, Math.floor((diasDesdePlantio / info.diasCrescimento) * 100));
+            });
+
+            if (graficoProgresso) graficoProgresso.destroy();
+
+            graficoProgresso = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: rotulos.length ? rotulos : ['Nenhuma planta'],
+                    datasets: [{
+                        label: 'Progresso (%)',
+                        data: dados.length ? dados : [0],
+                        backgroundColor: '#10b981',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, max: 100 } }
+                }
+            });
+        }
+
+        function abrirModalTarefas(idPlanta) {
+            idPlantaSelecionada = idPlanta;
+            const planta = plantasUsuario.find(p => p.id === idPlanta);
+            const info = infoPlanta[planta.tipo] || { nome: planta.nome };
+
+            document.getElementById('modal-title').textContent = `Tarefas - ${info.nome}`;
+
+            const listaTarefas = document.getElementById('modal-tasks');
+            listaTarefas.innerHTML = '';
+
+            const tarefas = tarefasPorPlanta[planta.tipo] || [];
+            tarefas.forEach(tarefa => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between p-2 rounded hover:bg-garden-primary-light';
+                div.innerHTML = `
+            <label class="flex items-center cursor-pointer flex-1">
+                <input type="checkbox" ${tarefa.concluida ? 'checked' : ''} class="mr-2 accent-garden-success" data-tarefa="${tarefa.id}">
+                <span class="${tarefa.concluida ? 'line-through text-muted-foreground' : 'text-garden-secondary'}">${tarefa.nome}</span>
+            </label>
+            <span class="text-xs text-muted-foreground">${tarefa.frequencia}</span>
+        `;
+                listaTarefas.appendChild(div);
+            });
+
+            listaTarefas.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', function () {
+                    const idTarefa = parseInt(this.dataset.tarefa);
+                    alternarConclusaoTarefa(planta.tipo, idTarefa);
+                });
+            });
+
+            document.getElementById('floating-modal').classList.remove('hidden');
+        }
+
+        function alternarConclusaoTarefa(tipoPlanta, idTarefa) {
+            const tarefas = tarefasPorPlanta[tipoPlanta];
+            const tarefa = tarefas.find(t => t.id === idTarefa);
+            if (tarefa) {
+                tarefa.concluida = !tarefa.concluida;
+                atualizarBarraLateral();
+                renderizarPlantas();
+            }
+        }
+
+        function fecharModalFlutuante() {
+            document.getElementById('floating-modal').classList.add('hidden');
+        }
+
+        function adicionarNovaPlanta() {
+            window.location.href = 'escolhas.html'; // ou a página inicial do fluxo
+        }
+
+        // Eventos principais
+        document.getElementById('close-floating-modal')?.addEventListener('click', fecharModalFlutuante);
+        document.getElementById('add-plant-btn')?.addEventListener('click', adicionarNovaPlanta);
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', inicializarDashboard);
 
         // function updateCalendarDropdown() {
         //     const miniCal = document.getElementById('mini-calendar');
@@ -583,231 +719,7 @@
         //     miniCal.innerHTML = html;
         // }
 
-        function updateTasksDropdown() {
-            const list = document.getElementById('tasks-list-sidebar');
-            list.innerHTML = '';
-
-            let allTasks = [];
-            userPlants.forEach(plant => {
-                const info = plantInfo[plant.tipo] || { nome: plant.nome };
-                const tasks = plantTasks[plant.tipo] || [];
-                tasks.forEach(task => {
-                    if (!task.concluida) {
-                        allTasks.push({ plant: info.nome, task: task.nome, plantId: plant.id, taskId: task.id });
-                    }
-                });
-            });
-
-            if (allTasks.length === 0) {
-                list.innerHTML = '<li class="text-muted-foreground italic">Nenhuma tarefa pendente</li>';
-            } else {
-                allTasks.forEach(item => {
-                    const li = document.createElement('li');
-                    li.className = 'flex items-center justify-between p-1 rounded hover:bg-garden-primary-light transition';
-                    li.innerHTML = `
-                <label class="flex items-center cursor-pointer flex-1">
-                    <input type="checkbox" class="mr-2 accent-garden-success" data-plant="${item.plantId}" data-task="${item.taskId}">
-                    <span class="text-garden-secondary text-xs">${item.task}</span>
-                </label>
-                <span class="text-xs text-muted-foreground">${item.plant}</span>
-            `;
-                    list.appendChild(li);
-                });
-
-                // Adiciona evento de marcar
-                list.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-                    cb.addEventListener('change', function () {
-                        const plantId = this.dataset.plant;
-                        const taskId = parseInt(this.dataset.task);
-                        const plant = userPlants.find(p => p.id === plantId);
-                        if (plant) {
-                            const task = plantTasks[plant.tipo].find(t => t.id === taskId);
-                            if (task) {
-                                task.concluida = this.checked;
-                                updateSidebar();
-                                renderPlants();
-                            }
-                        }
-                    });
-                });
-            }
-        }
-
-        function updatePendingTasksCount() {
-            let count = 0;
-            userPlants.forEach(plant => {
-                const tasks = plantTasks[plant.tipo] || [];
-                count += tasks.filter(t => !t.concluida).length;
-            });
-            document.getElementById('pending-tasks-count').textContent = count;
-        }
-
-        function updateProgressChart() {
-            const ctx = document.getElementById('progress-chart')?.getContext('2d');
-            if (!ctx) return;
-
-            const labels = userPlants.map(p => plantInfo[p.tipo]?.nome || p.nome);
-            const data = userPlants.map(p => {
-                const info = plantInfo[p.tipo] || { diasCrescimento: 60 };
-                const diasDesdePlantio = Math.floor((new Date() - new Date(p.dataPlantio)) / 86400000);
-                return Math.min(100, Math.floor((diasDesdePlantio / info.diasCrescimento) * 100));
-            });
-
-            if (progressChart) progressChart.destroy();
-
-            progressChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels.length ? labels : ['Nenhuma planta'],
-                    datasets: [{
-                        label: 'Progresso (%)',
-                        data: data.length ? data : [0],
-                        backgroundColor: '#10b981',
-                        borderRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true, max: 100 } }
-                }
-            });
-        }
-
-        // Event listeners para dropdowns
-        document.getElementById('calendar-toggle')?.addEventListener('click', () => {
-            document.getElementById('calendar-dropdown').classList.toggle('hidden');
-            updateCalendarDropdown();
-        });
-
-        document.getElementById('tasks-toggle')?.addEventListener('click', () => {
-            document.getElementById('tasks-dropdown').classList.toggle('hidden');
-            updateTasksDropdown();
-        });
-
-        document.getElementById('progress-toggle')?.addEventListener('click', () => {
-            document.getElementById('progress-dropdown').classList.toggle('hidden');
-            updateProgressChart();
-        });
-
-        // === MODAL E TAREFAS ===
-        function openTasksModal(plantId) {
-            selectedPlantId = plantId;
-            const plant = userPlants.find(p => p.id === plantId);
-            const info = plantInfo[plant.tipo] || { nome: plant.nome };
-
-            document.getElementById('modal-title').textContent = `Tarefas - ${info.nome}`;
-
-            const tasksList = document.getElementById('modal-tasks');
-            tasksList.innerHTML = '';
-
-            const tasks = plantTasks[plant.tipo] || [];
-            tasks.forEach(task => {
-                const div = document.createElement('div');
-                div.className = 'flex items-center justify-between p-2 rounded hover:bg-garden-primary-light';
-                div.innerHTML = `
-            <label class="flex items-center cursor-pointer flex-1">
-                <input type="checkbox" ${task.concluida ? 'checked' : ''} class="mr-2 accent-garden-success" data-task="${task.id}">
-                <span class="${task.concluida ? 'line-through text-muted-foreground' : 'text-garden-secondary'}">${task.nome}</span>
-            </label>
-            <span class="text-xs text-muted-foreground">${task.frequencia}</span>
-        `;
-                tasksList.appendChild(div);
-            });
-
-            // Eventos de checkbox
-            tasksList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-                cb.addEventListener('change', function () {
-                    const taskId = parseInt(this.dataset.task);
-                    toggleTaskCompletion(plant.tipo, taskId);
-                });
-            });
-
-            document.getElementById('floating-modal').classList.remove('hidden');
-        }
-
-        function renderTasks(plantType) {
-            const tasksList = document.getElementById('tasks-list');
-            const tasks = plantTasks[plantType] || [];
-            tasksList.innerHTML = '';
-
-            tasks.forEach(task => {
-                const taskHTML = `
-                <div class="task-item">
-                    <div class="task-checkbox ${task.concluida ? 'checked' : ''}" data-task-id="${task.id}">
-                        ${task.concluida ? '✓' : ''}
-                    </div>
-                    <div class="flex-1">
-                        <div class="font-medium ${task.concluida ? 'line-through text-muted-foreground' : 'text-garden-secondary'}">
-                            ${task.nome}
-                        </div>
-                        <div class="text-xs text-muted-foreground">${task.frequencia}</div>
-                    </div>
-                </div>
-            `;
-                tasksList.innerHTML += taskHTML;
-            });
-
-            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
-                checkbox.addEventListener('click', function () {
-                    const taskId = parseInt(this.getAttribute('data-task-id'));
-                    toggleTaskCompletion(plantType, taskId);
-                });
-            });
-        }
-
-        function toggleTaskCompletion(plantType, taskId) {
-            const tasks = plantTasks[plantType];
-            const task = tasks.find(t => t.id === taskId);
-            if (task) {
-                task.concluida = !task.concluida;
-                renderTasks(plantType);
-                renderPlants();
-                updateSidebar();
-            }
-        }
-
-        function completeAllTasks() {
-            if (!selectedPlantId) return;
-            const plant = userPlants.find(p => p.id === selectedPlantId);
-            const tasks = plantTasks[plant.tipo] || [];
-            tasks.forEach(task => task.concluida = true);
-            renderTasks(plant.tipo);
-            renderPlants();
-            updateSidebar();
-        }
-        function closeFloatingModal() {
-            document.getElementById('floating-modal').classList.add('hidden');
-        }
-
-
-        document.getElementById('close-floating-modal').addEventListener('click', closeFloatingModal);
-
-        function addNewPlant() {
-            // Esconde todas as páginas
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.add('hidden');
-            });
-
-            // Mostra a página do formulário
-            const pageInfo = document.getElementById('page-info');
-            if (pageInfo) {
-                pageInfo.classList.remove('hidden');
-            } else {
-                console.error('Página #page-info não encontrada!');
-            }
-
-            // Atualiza URL (opcional)
-            history.pushState({}, '', '#page-info');
-
-            document.getElementById('add-plant-btn')?.addEventListener('click', addNewPlant);
-        }
-
-        function closeFloatingModal() {
-            document.getElementById('floating-modal')?.classList.add('hidden');
-        }
-
-        // function addNewPlant() {
+// function addNewPlant() {
         //     console.log("Botão clicado! Redirecionando...");
         //     window.location.href = 'conclusaoTarefas.html';
         // }
@@ -815,31 +727,6 @@
         // function addNewPlant() {
         //     window.location.href = 'escolhas.html';
         // }
-
-        // ESPERA O HTML CARREGAR ANTES DE BUSCAR O BOTÃO
-        document.addEventListener('DOMContentLoaded', function () {
-            const addBtn = document.getElementById('add-plant-btn');
-            if (addBtn) {
-                addBtn.addEventListener('click', addNewPlant);
-                console.log('Botão encontrado e configurado!');
-            } else {
-                console.error('Botão #add-plant-btn NÃO encontrado!');
-            }
-
-            // Outros listeners (se precisar)
-            document.getElementById('close-floating-modal')?.addEventListener('click', () => {
-                document.getElementById('floating-modal')?.classList.add('hidden');
-            });
-        });
-
-        // Inicializa
-        document.addEventListener('DOMContentLoaded', initDashboard);
-
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-            document.getElementById(pageId)?.classList.remove('hidden');
-            history.pushState({}, '', '#' + pageId);
-        }
     </script>
 </body>
 
