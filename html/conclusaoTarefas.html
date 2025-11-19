@@ -385,7 +385,7 @@
                                     <div class="text-muted-foreground mt-1">
                                         ${passo.materiais.map(material => `
                                             <div class="flex items-center mb-1">
-                                                <span class="material-icon">Pin</span>
+                                                <span class="material-icon">📌</span>
                                                 <span>${material}</span>
                                             </div>
                                         `).join('')}
@@ -448,19 +448,19 @@
             botaoFinalizar.disabled = passosConcluidos !== totalPassos;
         }
 
-        function gerarTarefasIniciais(tipo) {
-            const tarefas = {
-                alface: ['Regar hoje', 'Verificar o solo'],
-                rucula: ['Regar a cada 2 dias', 'Podar folhas velhas'],
-                couve: ['Regar abundantemente', 'Verificar pragas'],
-                manjericao: ['Regar diariamente', 'Podar flores'],
-                salsa: ['Regar a cada 2 dias', 'Colher ramos externos'],
-                cebolinha: ['Regar regularmente', 'Cortar folhas'],
-                alecrim: ['Regar a cada 5-7 dias', 'Podar para estimular crescimento'],
-                default: ['Regar a planta', 'Verificar luz solar']
-            };
-            return tarefas[tipo] || tarefas.default;
-        }
+        // function gerarTarefasIniciais(tipo) {
+        //     const tarefas = {
+        //         alface: ['Regar hoje', 'Verificar o solo'],
+        //         rucula: ['Regar a cada 2 dias', 'Podar folhas velhas'],
+        //         couve: ['Regar abundantemente', 'Verificar pragas'],
+        //         manjericao: ['Regar diariamente', 'Podar flores'],
+        //         salsa: ['Regar a cada 2 dias', 'Colher ramos externos'],
+        //         cebolinha: ['Regar regularmente', 'Cortar folhas'],
+        //         alecrim: ['Regar a cada 5-7 dias', 'Podar para estimular crescimento'],
+        //         default: ['Regar a planta', 'Verificar luz solar']
+        //     };
+        //     return tarefas[tipo] || tarefas.default;
+        // }
 
         function finalizarPlantio() {
             if (passosConcluidos !== totalPassos) {

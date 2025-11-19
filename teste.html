@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Clima Sumaré – FUNCIONANDO 100%</title>
+  <style>
+    body { font-family: Arial; text-align: center; padding: 50px; background: #ecfdf5; }
+    #clima { font-size: 2rem; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <h1>Clima em Sumaré - SP</h1>
+  <div id="clima">Carregando...</div>
+
+  <script>
+    async function buscarClima() {
+      const url = "https://api.open-meteo.com/v1/forecast?latitude=-22.8219&longitude=-47.2669&current=temperature_2m,precipitation,weather_code&timezone=America%2FSao_Paulo";
+
+      try {
+        const resposta = await fetch(url);
+        const dados = await resposta.json();
+
+        const temp = dados.current.temperature_2m.toFixed(1);
+        const chuva = dados.current.precipitation > 0.5 ? "Sim" : "Não";
+        const codigo = dados.current.weather_code;
+
+        const icones = {
+          0: "Soleado", 1: "Parcialmente nublado", 2: "Parcialmente nublado", 3: "Nublado",
+          45: "Nevoeiro", 51: "Garoa", 61: "Chuva leve", 63: "Chuva", 80: "Chuva forte", 95: "Trovoada"
+        };
+        const icone = icones[codigo] || "Parcialmente nublado";
+
+        document.getElementById("clima").innerHTML = `${icone} ${temp}°C • Chuva: ${chuva}`;
+        console.log("CLIMA CARREGADO COM SUCESSO!", dados);
+
+      } catch (erro) {
+        document.getElementById("clima").innerHTML = "Erro de rede (verifique internet)";
+        console.error(erro);
+      }
+    }
+
+    // Roda imediatamente
+    buscarClima();
+  </script>
+</body>
+</html>

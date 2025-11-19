@@ -332,14 +332,47 @@
 
         function gerarTarefasIniciais(tipo) {
             const tarefas = {
-                alface: ['Regar hoje', 'Verificar o solo'],
-                rucula: ['Regar a cada 2 dias', 'Podar folhas velhas'],
-                couve: ['Regar abundantemente', 'Verificar pragas'],
-                manjericao: ['Regar diariamente', 'Podar flores'],
-                salsa: ['Regar a cada 2 dias', 'Colher ramos externos'],
-                cebolinha: ['Regar regularmente', 'Cortar folhas'],
-                alecrim: ['Regar a cada 5-7 dias', 'Podar para estimular crescimento'],
-                default: ['Regar a planta', 'Verificar luz solar']
+                alface: [
+                    'Manter uma rotina leve de regas diárias',
+                    'Evitar exposição ao sol forte nos primeiros dias',
+                    'Garantir que o local mantenha boa ventilação'
+                ],
+                rucula: [
+                    'Regar de forma leve a cada dia ou dois',
+                    'Manter em local iluminado, porém sem calor excessivo',
+                    'Evitar mover o vaso nos primeiros dias'
+                ],
+                couve: [
+                    'Manter o solo sempre úmido com regas leves',
+                    'Deixar em um local com boa luz natural',
+                    'Proteger de vento forte'
+                ],
+                manjericao: [
+                    'Fazer pequenas regas diariamente',
+                    'Manter em ambiente iluminado e estável',
+                    'Evitar deixar a superfície secar completamente'
+                ],
+                salsa: [
+                    'Regar suavemente todos os dias',
+                    'Deixar em local com sombra leve e iluminação constante',
+                    'Manter o ambiente estável sem mudanças bruscas'
+                ],
+                cebolinha: [
+                    'Realizar regas leves diariamente',
+                    'Manter o vaso em local luminoso',
+                    'Evitar que a camada superficial seque totalmente'
+                ],
+                alecrim: [
+                    'Fazer regas leves em dias alternados',
+                    'Manter em área bem iluminada',
+                    'Evitar excesso de umidade ao redor'
+                ],
+                default: [
+                    'Manter regas leves e regulares',
+                    'Deixar o vaso em local iluminado e estável',
+                    'Evitar exposição forte ao sol nos primeiros dias'
+                ]
+
             };
             return tarefas[tipo] || tarefas.default;
         }
