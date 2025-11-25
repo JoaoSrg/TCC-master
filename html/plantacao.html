@@ -309,8 +309,6 @@
             <h3 id="modal-title" class="text-xl font-bold text-garden-secondary mb-4">Tarefas</h3>
             <div id="modal-tasks" class="space-y-3"></div>
             <div class="mt-6 flex justify-end gap-2">
-                <button id="complete-all-modal" class="text-sm text-garden-secondary hover:underline">Marcar
-                    todas</button>
                 <button id="close-modal-btn"
                     class="bg-garden-primary text-white px-4 py-2 rounded-lg text-sm">Fechar</button>
             </div>
@@ -318,8 +316,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
 
+    <script>
         // Chama ao carregar a página
         document.addEventListener("DOMContentLoaded", atualizarClima);
 
@@ -342,36 +340,59 @@
         // Tarefas por tipo de planta
         const tarefasPorPlanta = {
             'alface': [
-                { id: 1, nome: 'Fazer uma rega leve', frequencia: 'diária', concluida: false },
-                { id: 2, nome: 'Evitar sol muito forte', frequencia: 'diária', concluida: false },
-                { id: 3, nome: 'Manter o local ventilado', frequencia: 'diária', concluida: false }
+                { id: 1, nome: 'Regar levemente 1–2x por dia mantendo o solo úmido (nunca encharcado)', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 2, nome: 'Manter em local com luz indireta ou sol da manhã apenas (evitar sol forte do meio-dia)', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 3, nome: 'Não mexer nem compactar a terra para não deslocar as sementes', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 4, nome: 'Verificar a umidade com o dedo: se os primeiros 2 cm estiverem secos, regue suavemente', frequencia: '2x por dia', concluida: false }
             ],
+
             'rucula': [
-                { id: 1, nome: 'Manter regas leves', frequencia: 'diária', concluida: false },
-                { id: 2, nome: 'Evitar calor excessivo', frequencia: 'diária', concluida: false },
-                { id: 3, nome: 'Manter o vaso no mesmo local', frequencia: 'a cada 2 dias', concluida: false }
+                { id: 1, nome: 'Regar 1–2x por dia com borrifador para manter a superfície sempre úmida', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 2, nome: 'Proteger do sol direto forte (máximo 3–4h de sol suave ou luz intensa indireta)', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 3, nome: 'Não mover o vaso de lugar para não alterar temperatura e umidade', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 4, nome: 'Evitar vento direto (pode secar rápido demais as sementes)', frequencia: 'dia 1 e 2', concluida: false }
             ],
+
             'couve': [
-                { id: 1, nome: 'Realizar rega suave', frequencia: 'diária', concluida: false },
-                { id: 2, nome: 'Garantir boa luz natural', frequencia: 'diária', concluida: false },
-                { id: 3, nome: 'Proteger de ventos fortes', frequencia: 'a cada 2 dias', concluida: false }
+                { id: 1, nome: 'Regar suavemente 1–2x por dia mantendo o solo úmido em profundidade', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 2, nome: 'Garantir 4–6h de sol direto suave ou luz muito forte indireta', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 3, nome: 'Proteger de ventos fortes e correntes de ar nos primeiros dias', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 4, nome: 'Não compactar a terra nem pisar perto do vaso', frequencia: 'dia 1 e 2', concluida: false }
             ],
+
             'manjericao': [
-                { id: 1, nome: 'Regar um pouco todos os dias', frequencia: 'diária', concluida: false },
-                { id: 2, nome: 'Manter em ambiente iluminado', frequencia: 'diária', concluida: false },
-                { id: 3, nome: 'Evitar mudanças bruscas de temperatura', frequencia: 'a cada 2 dias', concluida: false }
+                { id: 1, nome: 'Regar levemente 2x por dia (manhã e fim de tarde) mantendo úmido constante', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 2, nome: 'Manter em local quente (24–30°C) com luz intensa, mas sem sol direto forte', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 3, nome: 'Cobrir com sacolinha transparente ou domo nos 2 primeiros dias se o ar estiver seco', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 4, nome: 'Evitar mudanças bruscas de temperatura (não leve para perto de janela fria à noite)', frequencia: 'dia 1 e 2', concluida: false }
             ],
+
             'salsa': [
-                { id: 1, nome: 'Fazer regas suaves', frequencia: 'diária', concluida: false },
-                { id: 2, nome: 'Manter em local com iluminação constante', frequencia: 'a cada 2 dias', concluida: false }
+                { id: 1, nome: 'Regar 2x por dia com borrifador fino para não afundar as sementes', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 2, nome: 'Manter em luz intensa ou sol da manhã (germina melhor com calor e luz)', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 3, nome: 'Cobrir levemente com filme plástico ou sacola transparente para criar microclima úmido', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 4, nome: 'Não mexer na terra (sementes de salsa são lentas e sensíveis)', frequencia: 'dia 1 e 2', concluida: false }
             ],
+
             'cebolinha': [
-                { id: 1, nome: 'Regar levemente', frequencia: 'diária', concluida: false },
-                { id: 2, nome: 'Manter em área bem iluminada', frequencia: 'a cada 2 dias', concluida: false }
+                { id: 1, nome: 'Regar levemente 1–2x por dia mantendo a superfície úmida', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 2, nome: 'Manter em local com bastante luz (mínimo 4–5h de sol direto ou luz forte)', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 3, nome: 'Não compactar o solo nem mexer nos primeiros dias', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 4, nome: 'Evitar temperaturas abaixo de 18°C à noite', frequencia: 'dia 1 e 2', concluida: false }
             ],
+
             'alecrim': [
-                { id: 1, nome: 'Regar com pouca água', frequencia: 'a cada 2 dias', concluida: false },
-                { id: 2, nome: 'Garantir boa iluminação', frequencia: 'diária', concluida: false }
+                { id: 1, nome: 'Regar apenas o suficiente para umedecer (não encharcar – alecrim odeia excesso)', frequencia: '1x por dia no máximo', concluida: false },
+                { id: 2, nome: 'Colocar em local com sol pleno desde o primeiro dia (mínimo 6h direto)', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 3, nome: 'Garantir boa ventilação (nada de cobrir com plástico)', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 4, nome: 'Verificar drenagem: se sair água pelo fundo logo após rega, está perfeito', frequencia: 'dia 1 e 2', concluida: false }
+            ],
+
+            'espinafre': [
+                { id: 1, nome: 'Regar 2x por dia (manhã e fim de tarde) mantendo o solo sempre úmido', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 2, nome: 'Manter em local com luz intensa ou sol suave (evitar sol forte do meio-dia)', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 3, nome: 'Não mexer nem compactar a terra para não deslocar sementes', frequencia: 'dia 1 e 2', concluida: false },
+                { id: 4, nome: 'Se o ar estiver muito seco, cobrir com filme plástico transparente (retirar ao brotar)', frequencia: 'dia 1 e 2', concluida: false }
             ]
         };
 
@@ -387,6 +408,7 @@
             'alecrim': { nome: 'Alecrim', tipo: 'tempero', diasCrescimento: 120 }
         };
 
+        // inicializa a dashboard
         function inicializarDashboard() {
             carregarDadosUsuario();
             atualizarHora();
@@ -394,9 +416,9 @@
             renderizarPlantas();
             renderizarCalendario();
             atualizarBarraLateral();
-            configurarEventos();
         }
 
+        //carrega dados da localstorage
         function carregarDadosUsuario() {
             const usuarioSalvo = localStorage.getItem('hortaUser');
             const plantasSalvas = localStorage.getItem('hortaPlants');
@@ -414,24 +436,29 @@
             atualizarInfoUsuario();
         }
 
+        //salva dados na localstorage
         function salvarPlantas() {
             localStorage.setItem('hortaPlants', JSON.stringify(plantasUsuario));
         }
 
+        //atualiza informações do usuário na navbar
         function atualizarInfoUsuario() {
             document.getElementById('user-name').textContent = usuarioAtual.nome;
             document.getElementById('user-initial').textContent = usuarioAtual.nome.charAt(0).toUpperCase();
         }
 
+        //atualiza hora na navbar
         function atualizarHora() {
             const agora = new Date();
             const horaFormatada = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
             document.getElementById('current-time').textContent = horaFormatada;
         }
 
+        //renderiza as plantas na dashboard
         function renderizarPlantas() {
             const container = document.getElementById('plants-container');
 
+            //se nao tiver plantas, mostra mensagem
             if (plantasUsuario.length === 0) {
                 container.innerHTML = `
             <div class="col-span-3 text-center py-12">
@@ -440,18 +467,25 @@
                 <p class="text-muted-foreground mb-4">Adicione sua primeira planta para começar!</p>
             </div>
         `;
+                //retorno :)
                 return;
             }
 
+            //limpa o container
             container.innerHTML = '';
 
+            //cria cards para cada planta
             plantasUsuario.forEach(planta => {
                 const info = infoPlanta[planta.tipo] || { nome: planta.nome, tipo: 'desconhecida', diasCrescimento: 60 };
                 const diasDesdePlantio = Math.floor((new Date() - new Date(planta.dataPlantio)) / (1000 * 60 * 60 * 24));
                 const progresso = Math.min(100, Math.floor((diasDesdePlantio / info.diasCrescimento) * 100));
 
+
+                //estrutura do card
+                //papai do ceu ficou orgulhoso de mim
+                //oq estiver em branco sao as informacoes dinamicas da planta salva no localstorage 
                 const card = `
-            <div class="plant-card group" data-plant-id="${planta.id}">
+                <div class="plant-card group" data-plant-id="${planta.id}">
                 <div class="flex justify-between items-start mb-3">
                     <h3 class="text-xl font-bold text-garden-secondary">${info.nome}</h3>
                     <span class="bg-garden-success/20 text-garden-success px-2 py-1 rounded-full text-xs font-medium">
@@ -485,9 +519,11 @@
             </div>
         `;
 
+                //adiciona o card ao container :)
                 container.innerHTML += card;
             });
 
+            //adiciona evento de clique para abrir modal de tarefas
             document.querySelectorAll('.plant-card').forEach(card => {
                 card.addEventListener('click', function () {
                     const idPlanta = this.getAttribute('data-plant-id');
@@ -496,6 +532,7 @@
             });
         }
 
+        //renderiza o calendario na sidebar, simples
         function renderizarCalendario() {
             const calendarioEl = document.getElementById('calendar');
             const hoje = new Date();
@@ -505,23 +542,28 @@
             const nomesMeses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
                 "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
+                //estrutura basica do calendario
+                //pq tem varias divs ali embaixo? nao sei e nao sei pra q serve
             let htmlCalendario = `
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="font-semibold text-garden-secondary">${nomesMeses[mesAtual]} ${anoAtual}</h3>
-        </div>
-        <div class="grid grid-cols-7 gap-1 text-xs text-center text-muted-foreground mb-2">
-            <div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div>
-        </div>
-        <div class="grid grid-cols-7 gap-1">
-    `;
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-semibold text-garden-secondary">${nomesMeses[mesAtual]} ${anoAtual}</h3>
+                </div>
+                <div class="grid grid-cols-7 gap-1 text-xs text-center text-muted-foreground mb-2">
+                    <div>D</div><div>S</div><div>T</div><div>Q</div><div>Q</div><div>S</div><div>S</div>
+                </div>
+                <div class="grid grid-cols-7 gap-1">
+                `;
 
+                //calcula o primeiro e ultimo dia do mes
             const primeiroDia = new Date(anoAtual, mesAtual, 1);
             const ultimoDia = new Date(anoAtual, mesAtual + 1, 0);
 
+            //adiciona dias vazios antes do primeiro dia do mes
             for (let i = 0; i < primeiroDia.getDay(); i++) {
                 htmlCalendario += `<div class="calendar-day"></div>`;
             }
 
+            //adiciona os dias do mes
             for (let dia = 1; dia <= ultimoDia.getDate(); dia++) {
                 const dataStr = `${anoAtual}-${String(mesAtual + 1).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
                 const temPlanta = plantasUsuario.some(planta => {
@@ -529,29 +571,34 @@
                     return dataPlantio === dataStr;
                 });
 
+                //verifica se é o dia atual
                 const ehHoje = hoje.getDate() === dia && hoje.getMonth() === mesAtual && hoje.getFullYear() === anoAtual;
 
+                //adiciona o dia ao calendario
                 htmlCalendario += `
             <div class="calendar-day ${temPlanta ? 'has-plant' : ''} ${ehHoje ? 'today' : ''}">
                 ${dia}
             </div>
         `;
             }
-
+            //fecha o calendario, pq tem outra div? pensa ai
             htmlCalendario += `</div>`;
             calendarioEl.innerHTML = htmlCalendario;
         }
 
+        //atualiza a barra lateral com tarefas pendentes, contagem e grafico
         function atualizarBarraLateral() {
             atualizarTarefasPendentes();
             atualizarContagemTarefas();
             atualizarGraficoProgresso();
         }
 
+        //atualiza a lista de tarefas pendentes na sidebar
         function atualizarTarefasPendentes() {
             const lista = document.getElementById('tasks-list-sidebar');
             lista.innerHTML = '';
 
+            //agrega todas as tarefas pendentes
             let todasTarefas = [];
             plantasUsuario.forEach(planta => {
                 const info = infoPlanta[planta.tipo] || { nome: planta.nome };
@@ -563,9 +610,11 @@
                 });
             });
 
+            //se nao tiver tarefas, mostra mensagem
             if (todasTarefas.length === 0) {
                 lista.innerHTML = '<li class="text-muted-foreground italic">Nenhuma tarefa pendente</li>';
             } else {
+                //cria itens para cada tarefa pendente
                 todasTarefas.forEach(item => {
                     const li = document.createElement('li');
                     li.className = 'flex items-center justify-between p-1 rounded hover:bg-garden-primary-light transition';
@@ -579,6 +628,7 @@
                     lista.appendChild(li);
                 });
 
+                //adiciona evento de clique para marcar tarefa como concluida
                 lista.querySelectorAll('input[type="checkbox"]').forEach(cb => {
                     cb.addEventListener('change', function () {
                         const idPlanta = this.dataset.planta;
@@ -597,6 +647,7 @@
             }
         }
 
+        //atualiza a contagem de tarefas pendentes na sidebar
         function atualizarContagemTarefas() {
             let total = 0;
             plantasUsuario.forEach(planta => {
@@ -606,10 +657,12 @@
             document.getElementById('pending-tasks-count').textContent = total;
         }
 
+        //atualiza o grafico de progresso na sidebar
         function atualizarGraficoProgresso() {
             const ctx = document.getElementById('progress-chart')?.getContext('2d');
             if (!ctx) return;
 
+            //dados do grafico, tem coisa que so existe aqui
             const rotulos = plantasUsuario.map(p => infoPlanta[p.tipo]?.nome || p.nome);
             const dados = plantasUsuario.map(p => {
                 const info = infoPlanta[p.tipo] || { diasCrescimento: 60 };
@@ -619,6 +672,7 @@
 
             if (graficoProgresso) graficoProgresso.destroy();
 
+            //cria o grafico
             graficoProgresso = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -638,6 +692,7 @@
             });
         }
 
+        //abre o modal flutuante de tarefas para a planta selecionada
         function abrirModalTarefas(idPlanta) {
             idPlantaSelecionada = idPlanta;
             const planta = plantasUsuario.find(p => p.id === idPlanta);
@@ -645,11 +700,14 @@
 
             document.getElementById('modal-title').textContent = `Tarefas - ${info.nome}`;
 
+            //popula a lista de tarefas no modal
             const listaTarefas = document.getElementById('modal-tasks');
             listaTarefas.innerHTML = '';
 
+            //pega as tarefas da planta
             const tarefas = tarefasPorPlanta[planta.tipo] || [];
             tarefas.forEach(tarefa => {
+                //estrutura de cada tarefa no modal
                 const div = document.createElement('div');
                 div.className = 'flex items-center justify-between p-2 rounded hover:bg-garden-primary-light';
                 div.innerHTML = `
@@ -658,20 +716,23 @@
                 <span class="${tarefa.concluida ? 'line-through text-muted-foreground' : 'text-garden-secondary'}">${tarefa.nome}</span>
             </label>
             <span class="text-xs text-muted-foreground">${tarefa.frequencia}</span>
-        `;
+        `;      
+                //adiciona a tarefa na lista do modal
                 listaTarefas.appendChild(div);
             });
 
+            //adiciona evento de clique para marcar tarefa como concluida
             listaTarefas.querySelectorAll('input[type="checkbox"]').forEach(cb => {
                 cb.addEventListener('change', function () {
                     const idTarefa = parseInt(this.dataset.tarefa);
                     alternarConclusaoTarefa(planta.tipo, idTarefa);
                 });
             });
-
+            //mostra o modal
             document.getElementById('floating-modal').classList.remove('hidden');
         }
 
+        //alterna o status de conclusão de uma tarefa
         function alternarConclusaoTarefa(tipoPlanta, idTarefa) {
             const tarefas = tarefasPorPlanta[tipoPlanta];
             const tarefa = tarefas.find(t => t.id === idTarefa);
@@ -682,93 +743,119 @@
             }
         }
 
+        //fecha o modal flutuante de tarefas
         function fecharModalFlutuante() {
             document.getElementById('floating-modal').classList.add('hidden');
 
         }
 
-        function adicionarNovaPlanta() {
-            document.addEventListener('DOMContentLoaded', function () {
-                const addBtn = document.getElementById('add-plant-btn');
+        //adiciona evento ao botao de adicionar nova planta
+        function adicionarNovaPlanta(index) {
+            const addBtn = document.getElementById('add-plant-btn');
 
-                if (addBtn) {
-                    addBtn.addEventListener('click', function () {
-                        document.querySelectorAll('.page').forEach(page => {
-                            page.classList.remove('active');
-                            page.classList.add('hidden');
-                        });
-                        const pageInfo = document.getElementById('page-info');
-                        if (pageInfo) {
-                            pageInfo.classList.remove('hidden');
-                            pageInfo.classList.add('active');
-                            pageInfo.scrollIntoView({ behavior: 'smooth' });
-                        }
-                        history.pushState({}, 'Escolher planta', '#escolher-planta');
-                    });
-                    console.log('Botão + Adicionar Nova Planta configurado com sucesso!');
-                } else {
-                    console.error('ERRO: Botão #add-plant-btn não encontrado!');
-                }
+            if (!addBtn) {
+                console.error('ERRO: Botão #add-plant-btn não encontrado!');
+                return;
+            }
+            addBtn.addEventListener('click', function () {
+                window.location.href = "index.html#escolhas";
+
             });
 
-
+            console.log('Botão + Adicionar Nova Planta configurado com sucesso!');
         }
 
-
-        // Eventos principais
+        // eventos principais
         document.getElementById('close-floating-modal')?.addEventListener('click', fecharModalFlutuante);
         document.getElementById('close-modal-btn')?.addEventListener('click', fecharModalFlutuante);
         document.getElementById('add-plant-btn')?.addEventListener('click', adicionarNovaPlanta);
 
-        // Inicialização
+        // inicia a dashboard ao carregar a página
         document.addEventListener('DOMContentLoaded', inicializarDashboard);
 
 
+        // DESGRAÇA DA API DE CLIMA, demorei pra fazer essa merda funcionar, o erro sempre foi o link. vergonhoso
         async function atualizarClima() {
-            const params = {
-                latitude: -22.8219,
-                longitude: -47.2669,
-                current: ["temperature_2m", "precipitation", "weather_code"],
-                timezone: "America/Sao_Paulo"
-            };
+            // Sumaré-SP 
+            let latitude = -22.8219;  
+            let longitude = -47.2669;
+
+            // Nova Odessa, SP  
+            // let novaOdessaLatitude = -22.7775;  
+            // let novaOdessaLongitude = -47.2958; 
+
+            // // Campinas, SP  
+            // let campinasLatitude = -22.9056;   
+            // let campinasLongitude = -47.0609;   
+
+            // Americana, SP  
+            // let americanaLatitude = -22.7389;
+            // let americanaLongitude = -47.3308;  
+
+
+            // popup de permissão de geolocalizacao
+            if ("geolocation" in navigator) {
+                try {
+                    const pos = await new Promise((resolve, reject) => {
+                        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 7000 });
+                    });
+                    latitude = pos.coords.latitude;
+                    longitude = pos.coords.longitude;
+                } catch (err) {
+                    console.log("Geolocalização negada ou falhou, usando Sumaré como padrão");
+                }
+            }
+
+            const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,precipitation,weather_code&timezone=auto`;
 
             try {
-                // Tenta buscar da API
-                const data = await openmeteo.fetchWeatherApi("https://api.open-meteo.com/v1/forecast", params);
-                const current = data[0].current();
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Erro na API");
 
-                const temp = current.variables(0).value().toFixed(1);
-                const chuva = current.variables(1).value() > 0.5;
-                const codigo = current.variables(2).value();
+                const data = await response.json();
+                const current = data.current;
 
-                const icones = { 0: "☀️", 1: "🌤️", 2: "⛅", 3: "☁️", 45: "🌫️", 51: "🌦️", 61: "🌧️", 63: "🌧️", 80: "🌧️", 95: "⛈️" };
+                const temp = Math.round(current.temperature_2m);
+                const chuva = current.precipitation > 0.5;
+                const codigo = current.weather_code;
+
+                // mapa para os ícones
+                const icones = {
+                    0: "☀️",   // Claro
+                    1: "🌤️",   // Parcialmente nublado
+                    2: "⛅",    // Nublado
+                    3: "☁️",    // Encoberto
+                    45: "🌫️",  // Nevoeiro
+                    51: "🌦️",  // Garoa
+                    61: "🌧️",  // Chuva leve
+                    63: "🌧️",  // Chuva moderada
+                    65: "🌧️",  // Chuva forte
+                    80: "🌧️",  // Chuvisco
+                    95: "⛈️",  // Tempestade
+                };
+
                 const icone = icones[codigo] || "🌤️";
 
+                // atualiza o HTML
                 document.getElementById("clima-icone").textContent = icone;
                 document.getElementById("clima-texto").textContent = `${temp}°C${chuva ? " • chuva" : ""}`;
 
             } catch (err) {
-                // FALLBACK caso API falhe ou esteja em file:// → mostra dados reais de Sumaré agora
-                document.getElementById("clima-icone").textContent = "";
-                document.getElementById("clima-texto").textContent = "27°C";
-                console.log("API offline → usando fallback de Sumaré");
+                console.error("Erro ao carregar clima:", err);
+                document.getElementById("clima-icone").textContent = "🌐";
+                document.getElementById("clima-texto").textContent = "Sem conexão";
             }
         }
 
+        // executa ao carregar a página
         document.addEventListener("DOMContentLoaded", atualizarClima);
+
+        // atualiza a cada 10 minutos
         setInterval(atualizarClima, 10 * 60 * 1000);
 
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(pos => {
-                params.latitude = pos.coords.latitude;
-                params.longitude = pos.coords.longitude;
-                atualizarClima();
-            });
-        }
 
-        // Atualiza ao carregar e a cada 10 minutos
-        document.addEventListener("DOMContentLoaded", atualizarClima);
-        setInterval(atualizarClima, 10 * 60 * 1000);
+        // pq esse codigo esta aqui? plano mal feito e se vc perceber bem, ja tem um calendario ali em cima, pq outro?
+
         // function updateCalendarDropdown() {
         //     const miniCal = document.getElementById('mini-calendar');
         //     const today = new Date();
@@ -807,6 +894,16 @@
         // function addNewPlant() {
         //     window.location.href = 'escolhas.html';
         // }
+
+
+
+        //olha a mensagem!!!!!!!
+        // em todas as paginas existem varios styles e scripts q podem estar repetidos, falta de planejamento previo da nisso.
+        // provavel q muitas dessas coisas poderiam ser apagadas por nem funcionarem mais ou por ter sido viagem da minha mente.
+        // recomendo, deixa do jeito q ta, eu, João Sorgi, autorizo a desordem desse codigo maligno. 
+        // muita coisa foi feita do absoluto nada, ideia vem, implementa, testa, nao funciona? me perdi no codigo, comenta e deixa pra virar historia.
+        // para mim caso volte a essa merda, se planeje pelo amor de Deus! custa nada animal.
+        // finalizando esse codigo com um bom echoes do pink floyd, maluquice escutar 23 minutos de uma musica q so faz sentido bebado. 
     </script>
 </body>
 

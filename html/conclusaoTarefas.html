@@ -157,212 +157,240 @@
     <script>
         // Base de dados com guias de plantio
         const guiasPlantio = {
-            // VERDURAS
-            'alface': {
-                nome: 'Alface',
-                descricao: 'Folha verde fácil de cultivar, ideal para saladas frescas.',
+            'espinafre': {
+                nome: 'Espinafre',
+                descricao: 'Folha verde rica em ferro, vitamina A e K, cresce rápido e suporta bem sombra parcial. Colheita contínua a partir de 30–40 dias.',
                 passos: [
                     {
-                        titulo: 'Preparação do Solo',
-                        descricao: 'Prepare um solo argiloso profundo, bem drenado e rico em matéria orgânica (pH 6,0-7,0). Incorpore 15-20 t/ha de composto orgânico ou esterco curtido 5-10 dias antes.',
-                        duracao: '30-45 minutos',
-                        materiais: ['Vaso ou canteiro', 'Terra argilosa', 'Composto orgânico ou esterco curtido', 'Pá pequena', 'Análise de solo (opcional)']
+                        titulo: 'Preparação do Vaso',
+                        descricao: 'Use vaso de 15–30 L (mínimo 25 cm de profundidade). Misture 50% terra vegetal + 30% composto orgânico + 20% húmus de minhoca. pH ideal 6,3–7,0. Espinafre gosta de solo rico em matéria orgânica e bem drenado.',
+                        duracao: '15–25 minutos',
+                        materiais: ['Vaso com furos de drenagem', 'Terra vegetal', 'Composto orgânico', 'Húmus de minhoca', 'Camada de drenagem (argila expandida ou brita)']
                     },
                     {
-                        titulo: 'Plantio das Sementes',
-                        descricao: 'Faça covas de 0,5-1 cm de profundidade com espaçamento de 25-30 cm entre plantas e 30 cm entre linhas; coloque 2-3 sementes por cova e cubra levemente.',
-                        duracao: '20-30 minutos',
-                        materiais: ['Sementes de alface', 'Regador', 'Fita métrica para espaçamento']
+                        titulo: 'Plantio',
+                        descricao: 'Semeie direto no vaso a 1 cm de profundidade, espaçamento 15–20 cm entre plantas (8–12 plantas em vaso de 30 L). Pode fazer linhas ou espalhar e depois raleie. Germinação em 5–10 dias. Temperatura ideal 15–22 °C.',
+                        duracao: '15–20 minutos',
+                        materiais: ['Sementes de espinafre (variedades recomendadas: Viroflay, Space, Nova Zelândia)', 'Regador com chuveirinho fino']
                     },
                     {
-                        titulo: 'Rega Inicial',
-                        descricao: 'Regue suavemente para umedecer o solo sem encharcar. Mantenha úmido constante nos primeiros 7-10 dias para germinação.',
-                        duracao: '10 minutos',
-                        materiais: ['Regador com água morna']
+                        titulo: 'Rega e Cuidados Diários',
+                        descricao: 'Mantenha o solo constantemente úmido (nunca encharcado). Regue de preferência pela manhã ou final da tarde. Em dias muito quentes, regue 2x/dia. Evite molhar as folhas para reduzir risco de fungos. Colha folhas externas a partir de 30–40 dias, deixando o centro crescer (colheita contínua por até 3–4 meses).',
+                        duracao: '5–10 minutos/dia',
+                        materiais: ['Regador ou mangueira com bico fino', 'Cobertura morta opcional (palha ou folhas secas)']
+                    },
+                ]
+            },
+            'alface': {
+                nome: 'Alface',
+                descricao: 'Folha verde fácil e rápida, ideal para vasos e colheita contínua.',
+                passos: [
+                    {
+                        titulo: 'Preparação do Vaso',
+                        descricao: 'Use vaso de 15–25 L (30–40 cm de diâmetro). Misture 50% terra vegetal + 30% composto orgânico + 20% húmus de minhoca ou esterco curtido. pH ideal 6,0–7,0.',
+                        duracao: '15–20 minutos',
+                        materiais: ['Vaso com furos', 'Terra vegetal', 'Composto orgânico ou húmus', 'Argila expandida ou cacos no fundo']
+                    },
+                    {
+                        titulo: 'Plantio',
+                        descricao: 'Plante 4–6 plantas por vaso (espaçamento ≈ 15–20 cm). Semeie a 0,5 cm ou use mudas prontas. Colheita baby em 25–35 dias, cabeça em 45–60 dias.',
+                        duracao: '10–15 minutos',
+                        materiais: ['Sementes ou mudas de alface', 'Regador com chuveirinho']
+                    },
+                    {
+                        titulo: 'Rega',
+                        descricao: 'Mantenha o solo sempre úmido, mas nunca encharcado. Regue todo dia de manhã em dias quentes. Use pratinho embaixo só nos primeiros 10 dias.',
+                        duracao: '5 minutos/dia',
+                        materiais: ['Regador ou garrafa pet com furos']
                     }
                 ]
             },
             'rucula': {
                 nome: 'Rúcula',
-                descricao: 'Folhagem picante e nutritiva, perfeita para saladas.',
+                descricao: 'Sabor picante intenso, cresce rápido em qualquer vaso.',
                 passos: [
                     {
-                        titulo: 'Preparação do Solo',
-                        descricao: 'Use solo leve, bem drenado e rico em orgânicos (pH 6,0-7,0). Adicione composto para melhorar fertilidade; germinação em 3-5 dias.',
-                        duracao: '25-35 minutos',
-                        materiais: ['Vaso ou canteiro', 'Terra leve', 'Composto orgânico', 'Areia para drenagem']
+                        titulo: 'Preparação do Vaso',
+                        descricao: 'Vaso de 10–20 L basta. Misture 60% terra + 40% composto. Gosta de drenagem boa.',
+                        duracao: '10–15 minutos',
+                        materiais: ['Vaso raso', 'Terra + composto', 'Areia ou perlita (opcional)']
                     },
                     {
-                        titulo: 'Plantio das Sementes',
-                        descricao: 'Espalhe sementes uniformemente a 0,5 cm de profundidade, com espaçamento de 25 cm entre linhas; cubra finamente (0,2 g/m linear).',
-                        duracao: '15-20 minutos',
-                        materiais: ['Sementes de rúcula', 'Regador', 'Peneira fina para cobertura']
+                        titulo: 'Plantio',
+                        descricao: 'Espalhe as sementes na superfície e cubra com 2–3 mm de terra. Dá para colocar 8–12 plantas num vaso de 30 cm. Colheita baby em 20–30 dias.',
+                        duracao: '5–10 minutos',
+                        materiais: ['Sementes de rúcula', 'Peneirinha para cobrir']
                     },
                     {
-                        titulo: 'Rega Inicial',
-                        descricao: 'Regue com névoa fina para evitar deslocar sementes. Mantenha úmido, mas drenado, especialmente em climas quentes.',
-                        duracao: '10 minutos',
-                        materiais: ['Regador com bico fino']
+                        titulo: 'Rega',
+                        descricao: 'Rega diária leve (névoa). Se o vaso secar vira amarga e sobe rápido.',
+                        duracao: '5 minutos/dia',
+                        materiais: ['Regador fino ou borrifador']
                     }
                 ]
             },
             'couve': {
                 nome: 'Couve',
-                descricao: 'Folhagem verde e robusta, muito versátil na cozinha.',
+                descricao: 'Dá para cultivar em vaso grande e colher folha por folha por meses.',
                 passos: [
                     {
-                        titulo: 'Preparação do Solo',
-                        descricao: 'Solo profundo, fértil e drenado (pH 6,0-7,0). Incorpore 15-20 t/ha de esterco curtido ou composto, mais 50-100 g superfosfato por cova.',
-                        duracao: '35-50 minutos',
-                        materiais: ['Vaso grande ou canteiro', 'Terra fértil', 'Esterco curtido ou composto', 'Pá', 'Superfosfato simples']
+                        titulo: 'Preparação do Vaso',
+                        descricao: 'Vaso de no mínimo 20–30 L (mínimo 30 cm profundidade). 50% terra + 50% composto ou esterco curtido.',
+                        duracao: '20 minutos',
+                        materiais: ['Vaso grande', 'Terra vegetal', 'Composto rico']
                     },
                     {
-                        titulo: 'Plantio das Mudas',
-                        descricao: 'Plante mudas com 4-6 folhas verdadeiras, espaçamento de 50-70 cm entre plantas e linhas; enterre até a base das folhas.',
-                        duracao: '30-40 minutos',
-                        materiais: ['Mudas de couve (4-6 folhas)', 'Regador', 'Fita métrica']
+                        titulo: 'Plantio',
+                        descricao: '1 planta por vaso de 30 L ou 2 plantas em vaso de 50 L. Use muda com 4–6 folhas. Enterre até o colo.',
+                        duracao: '10 minutos',
+                        materiais: ['Muda de couve', 'Regador']
                     },
                     {
-                        titulo: 'Rega Inicial',
-                        descricao: 'Regue abundantemente para assentar o solo. Mantenha úmido constante, regando a cada 2-3 dias.',
-                        duracao: '15 minutos',
-                        materiais: ['Regador com água']
+                        titulo: 'Rega e Colheita',
+                        descricao: 'Regue 2–3× por semana (solo úmido, não encharcado). Comece a colher as folhas de baixo depois de 50–60 dias — a planta continua produzindo.',
+                        duracao: '5 minutos, 2–3×/semana',
+                        materiais: ['Tesoura limpa para colher']
                     }
                 ]
             },
-            // TEMPEROS
             'manjericao': {
                 nome: 'Manjericão',
-                descricao: 'Erva aromática perfeita para molhos e temperos.',
+                descricao: 'Erva mais fácil do mundo em vaso. Sol pleno = cheiroso o dia todo.',
                 passos: [
                     {
-                        titulo: 'Preparação do Solo',
-                        descricao: 'Solo leve, drenado e rico em orgânicos (pH 6,0-7,5). Adicione composto; adapta-se a climas quentes e úmidos.',
-                        duracao: '25-35 minutos',
-                        materiais: ['Vaso com furos', 'Terra leve', 'Areia para drenagem', 'Composto orgânico']
-                    },
-                    {
-                        titulo: 'Plantio das Sementes/Mudas',
-                        descricao: 'Semeie superficialmente (0,5 cm) ou plante mudas com espaçamento de 20-30 cm; rale para 2-3 plantas por local.',
-                        duracao: '20-25 minutos',
-                        materiais: ['Sementes ou mudas de manjericão', 'Regador', 'Tesoura para raleio']
-                    },
-                    {
-                        titulo: 'Rega Inicial',
-                        descricao: 'Regue moderadamente para umedecer; evite encharcamento, regando 2-3 vezes/semana.',
+                        titulo: 'Preparação',
+                        descricao: 'Vaso de 10–15 L. Terra leve + bastante composto. Coloque argila expandida no fundo.',
                         duracao: '10 minutos',
-                        materiais: ['Regador com água']
+                        materiais: ['Vaso', 'Terra + composto', 'Drenagem']
+                    },
+                    {
+                        titulo: 'Plantio',
+                        descricao: '3–5 mudas por vaso de 25 cm ou semeie direto. Belisque o broto central quando tiver 15 cm para ramificar.',
+                        duracao: '10 minutos',
+                        materiais: ['Mudas ou sementes', 'Tesoura']
+                    },
+                    {
+                        titulo: 'Cuidados',
+                        descricao: 'Regue quando a terra estiver seca 2 cm abaixo da superfície (2–3× por semana). Colha sempre as pontas para estimular crescimento.',
+                        duracao: '5 minutos, 2–3×/semana'
                     }
                 ]
             },
             'salsa': {
                 nome: 'Salsa',
-                descricao: 'Erva aromática versátil para diversos pratos.',
+                descricao: 'Demora germinar, mas depois vive anos no vaso.',
                 passos: [
                     {
-                        titulo: 'Preparação do Solo',
-                        descricao: 'Solo fértil, drenado e rico em orgânicos (pH 6,0-7,0). Incorpore composto; germinação lenta (14-21 dias).',
-                        duracao: '20-30 minutos',
-                        materiais: ['Vaso ou canteiro', 'Terra fértil', 'Composto orgânico', 'Calcário para pH (se necessário)']
+                        titulo: 'Preparação',
+                        descricao: 'Vaso 15–20 L. Terra rica e fofa. Deixe sementes de molho 24 h para acelerar.',
+                        duracao: '15 minutos',
+                        materiais: ['Vaso', 'Terra + composto']
                     },
                     {
-                        titulo: 'Plantio das Sementes',
-                        descricao: 'Semeie superficialmente (0,5 cm), cubra levemente e mantenha úmido; espaçamento final de 15-20 cm após raleio.',
-                        duracao: '15-20 minutos',
-                        materiais: ['Sementes de salsa (de molho 24h opcional)', 'Regador', 'Peneira fina']
-                    },
-                    {
-                        titulo: 'Rega Inicial',
-                        descricao: 'Mantenha solo constantemente úmido durante germinação (rega diária leve nos primeiros 20 dias).',
+                        titulo: 'Plantio',
+                        descricao: 'Espalhe sementes na superfície, cubra com 3–5 mm de terra. 6–10 plantas por vaso médio.',
                         duracao: '10 minutos',
-                        materiais: ['Regador com água']
+                        materiais: ['Sementes (de molho)', 'Regador fino']
+                    },
+                    {
+                        titulo: 'Rega',
+                        descricao: 'Mantenha úmido constante por 15–25 dias até germinar. Depois rega normal.',
+                        duracao: '5–10 minutos/dia no início'
                     }
                 ]
             },
             'cebolinha': {
                 nome: 'Cebolinha',
-                descricao: 'Tempero versátil para saladas, sopas e omeletes.',
+                descricao: 'A campeã dos vasos pequenos. Uma touceira rende para sempre.',
                 passos: [
                     {
-                        titulo: 'Preparação do Solo',
-                        descricao: 'Solo drenado, fértil e rico em orgânicos (pH 6,0-7,0). Adicione composto; ideal para vasos pequenos.',
-                        duracao: '20-25 minutos',
-                        materiais: ['Vaso pequeno', 'Terra drenada', 'Composto orgânico']
+                        titulo: 'Preparação',
+                        descricao: 'Qualquer vaso a partir de 5 L serve. Terra normal + composto.',
+                        duracao: '5 minutos',
+                        materiais: ['Vaso pequeno', 'Terra comum']
                     },
                     {
-                        titulo: 'Plantio das Mudas/Sementes',
-                        descricao: 'Plante mudas ou divida touceiras com espaçamento de 10-15 cm; por sementes, superficialmente.',
-                        duracao: '15 minutos',
-                        materiais: ['Mudas ou sementes de cebolinha', 'Regador', 'Faca para divisão']
+                        titulo: 'Plantio',
+                        descricao: 'Divida uma touceira do mercado em 3–4 partes e plante. Ou use sementes (mais demorado).',
+                        duracao: '5 minutos',
+                        materiais: ['Touceira ou sementes', 'Faca']
                     },
                     {
-                        titulo: 'Rega Inicial',
-                        descricao: 'Regue bem para assentar; mantenha úmido, regando a cada 2 dias em climas amenos.',
-                        duracao: '10 minutos',
-                        materiais: ['Regador com água']
+                        titulo: 'Colheita',
+                        descricao: 'Corte a 3 cm do solo quando atingir 15–20 cm. Volta em 15 dias. Regue 2–3× por semana.',
+                        duracao: '2 minutos sempre que precisar'
                     }
                 ]
             },
             'alecrim': {
                 nome: 'Alecrim',
-                descricao: 'Arbusto aromático resistente para carnes e assados.',
+                descricao: 'Arbusto que vive anos em vaso, ama sol e odeia excesso de água.',
                 passos: [
                     {
-                        titulo: 'Preparação do Solo',
-                        descricao: 'Solo arenoso, bem drenado e pobre em orgânicos (pH 6,0-7,5); adicione areia se necessário.',
-                        duracao: '20-30 minutos',
-                        materiais: ['Vaso com boa drenagem', 'Terra arenosa', 'Areia grossa', 'Argila expandida para fundo']
+                        titulo: 'Preparação',
+                        descricao: 'Vaso 15–25 L com MUITA drenagem. Misture 50% terra + 30% areia grossa + 20% composto.',
+                        duracao: '15 minutos',
+                        materiais: ['Vaso com furos grandes', 'Areia grossa', 'Argila expandida']
                     },
                     {
-                        titulo: 'Plantio das Mudas',
-                        descricao: 'Plante mudas por estaquia (10 cm) com espaçamento de 30-50 cm; evite transplantes frequentes.',
-                        duracao: '25-30 minutos',
-                        materiais: ['Mudas ou estacas de alecrim', 'Regador', 'Hormônio enraizador (opcional)']
-                    },
-                    {
-                        titulo: 'Rega Inicial',
-                        descricao: 'Regue moderadamente na primeira semana; depois, espaçe para 5-7 dias, tolerando seco.',
+                        titulo: 'Plantio',
+                        descricao: '1 muda por vaso. Enterre só até o colo. Melhor fazer estaquia do que comprar muda ruim.',
                         duracao: '10 minutos',
-                        materiais: ['Regador com água']
+                        materiais: ['Estaca ou muda saudável']
+                    },
+                    {
+                        titulo: 'Rega',
+                        descricao: 'Regue só quando a terra estiver bem seca (a cada 7–10 dias no verão, 15 dias no inverno). Nunca deixe água no pratinho.',
+                        duracao: '5 minutos, 1× por semana ou menos'
                     }
                 ]
             }
         };
 
+        // variaveis de estado
         let plantaAtual = '';
         let passosConcluidos = 0;
         let totalPassos = 0;
 
+        // funcoes principais
         function carregarGuiaPlantio() {
             const parametrosUrl = new URLSearchParams(window.location.search);
             const idPlanta = parametrosUrl.get('plant');
 
+            // verifica se a planta existe
             if (!idPlanta || !guiasPlantio[idPlanta]) {
                 document.getElementById('plant-name').textContent = 'Planta não encontrada';
                 document.getElementById('plant-description').textContent = 'Volte e selecione uma planta válida.';
                 return;
             }
 
+            // carrega os dados da planta
             plantaAtual = idPlanta;
             const guia = guiasPlantio[idPlanta];
 
+            // atualiza o cabeçalho
             document.getElementById('plant-name').textContent = guia.nome;
             document.getElementById('plant-description').textContent = guia.descricao;
 
+            // renderiza os passos
             totalPassos = guia.passos.length;
             renderizarPassos(guia.passos);
             atualizarProgresso();
         }
 
+        // renderiza os passos do guia
         function renderizarPassos(passos) {
-        const container = document.getElementById('steps-container');
-        container.innerHTML = '';
+            const container = document.getElementById('steps-container');
+            container.innerHTML = '';
 
-        passos.forEach((passo, indice) => {
-            const numeroPasso = indice + 1;
-            const bloqueado = indice > 0; // Primeiro passo sempre liberado
+            // cria cada passo
+            passos.forEach((passo, indice) => {
+                const numeroPasso = indice + 1;
+                const bloqueado = indice > 0; // Primeiro passo sempre liberado
 
-            const htmlPasso = `
+                // HTML do passo, dps do primeiro check, nao aparece mais o ✓, aparece a palavra Check, nao consegui resolver isso
+                // caso vc ser humano que estiver vendo esse codigo por algum motivo, tenta resolver ai namoral
+                const htmlPasso = `
                 <div class="step-card ${bloqueado ? 'locked' : ''}" id="passo-${numeroPasso}">
                     <div class="flex items-start">
                         <div class="step-number">${numeroPasso}</div>
@@ -397,11 +425,14 @@
                 </div>
             `;
 
-            container.innerHTML += htmlPasso;
-        });
+            // adiciona o passo ao container
+                container.innerHTML += htmlPasso;
+            });
 
-            // Adiciona clique nos checkmarks dos passos liberados
+            // adiciona clique nos checkmarks dos passos liberados
             document.querySelectorAll('.checkmark').forEach(marca => {
+
+                // só adiciona evento se o passo n estiver bloqueado
                 if (!marca.closest('.step-card.locked')) {
                     marca.addEventListener('click', function () {
                         const num = parseInt(this.getAttribute('data-passo'));
@@ -411,15 +442,18 @@
             });
         }
 
+        // alterna o status de conclusão de um passo
         function alternarConclusaoPasso(numeroPasso) {
             const cardPasso = document.getElementById(`passo-${numeroPasso}`);
             const checkmark = cardPasso.querySelector('.checkmark');
 
+            // alterna o estado
             if (checkmark.classList.contains('checked')) {
                 checkmark.classList.remove('checked');
                 cardPasso.classList.remove('completed');
                 passosConcluidos--;
             } else {
+                // marca como concluído
                 checkmark.classList.add('checked');
                 cardPasso.classList.add('completed');
                 passosConcluidos++;
@@ -436,10 +470,11 @@
                 }
             }
 
+            // atualiza o progresso :)
             atualizarProgresso();
         }
 
-
+        // atualiza a barra de progresso e o botão de finalizar
         function atualizarProgresso() {
             const progresso = (passosConcluidos / totalPassos) * 100;
             document.getElementById('progress-fill').style.width = `${progresso}%`;
@@ -447,6 +482,8 @@
             const botaoFinalizar = document.getElementById('finish-planting');
             botaoFinalizar.disabled = passosConcluidos !== totalPassos;
         }
+
+        // nao sei pq esta aqui ainda, mas vai q um dia eu precise
 
         // function gerarTarefasIniciais(tipo) {
         //     const tarefas = {
@@ -462,12 +499,14 @@
         //     return tarefas[tipo] || tarefas.default;
         // }
 
+        // finaliza o plantio
         function finalizarPlantio() {
             if (passosConcluidos !== totalPassos) {
                 alert('Complete todos os passos antes de finalizar!');
                 return;
             }
 
+            // Mostra mensagem de sucesso
             const guia = guiasPlantio[plantaAtual];
             alert(`Parabéns! Você plantou ${guia.nome} com sucesso!`);
 

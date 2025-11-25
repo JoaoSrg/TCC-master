@@ -237,6 +237,10 @@
             font-size: 2rem;
             margin-bottom: 1rem;
         }
+
+        .page.hidden {
+            display: none;
+        }
     </style>
 </head>
 
@@ -296,85 +300,52 @@
                 <header class="mb-12 text-center fade-in">
                     <div class="flex items-center justify-center gap-3">
                         <span class="text-3xl">🌱</span>
-                        <h1 class="text-4xl font-bold text-garden-secondary">Vamos conhecer seu espaço, <span
+                        <h1 class="text-4xl font-bold text-garden-secondary">Vamos começar, <span
                                 id="user-greeting"></span></h1>
                     </div>
                     <p class="text-muted-foreground mt-2">Com essas informações, conseguimos recomendar as melhores
                         plantas para você</p>
                 </header>
 
-                <div class="space-y-8">
-                    <!-- Espaço disponível -->
-                    <div class="fade-in" style="animation-delay: 0.1s">
-                        <h2 class="text-xl font-semibold mb-4 text-garden-secondary">🏠 Espaço disponível</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <label class="option-card">
-                                <input type="radio" name="espaco" value="varanda-pequena" class="mr-2">
-                                <span class="font-semibold">Varanda pequena</span><br>
-                                <span class="text-muted-foreground text-sm">Até 2m²</span>
-                            </label>
-                            <label class="option-card">
-                                <input type="radio" name="espaco" value="varanda-media" class="mr-2">
-                                <span class="font-semibold">Varanda média</span><br>
-                                <span class="text-muted-foreground text-sm">2-6m²</span>
-                            </label>
-                            <label class="option-card">
-                                <input type="radio" name="espaco" value="quintal" class="mr-2">
-                                <span class="font-semibold">Quintal</span><br>
-                                <span class="text-muted-foreground text-sm">Mais de 6m²</span>
-                            </label>
-                            <label class="option-card">
-                                <input type="radio" name="espaco" value="dentro-casa" class="mr-2">
-                                <span class="font-semibold">Dentro de casa</span><br>
-                                <span class="text-muted-foreground text-sm">Janelas e ambientes internos</span>
-                            </label>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        
+
+                        <!-- Card 1 – Espaço -->
+                        <div
+                            class="bg-white rounded-2xl shadow-lg p-8 text-center border border-green-100 hover:shadow-xl transition-shadow">
+                            <div class="text-5xl mb-4">🪴</div>
+                            <h3 class="text-xl font-bold text-garden-secondary mb-3">Espaço não é problema</h3>
+                            <p class="text-muted-foreground leading-relaxed">
+                                Um vaso, uma jardineira ou vários metros quadrados: <strong>tudo serve</strong>.
+                                Qualquer cantinho vira horta.
+                            </p>
                         </div>
+
+                        <!-- Card 2 – Nível -->
+                        <div
+                            class="bg-white rounded-2xl shadow-lg p-8 text-center border border-green-100 hover:shadow-xl transition-shadow">
+                            <div class="text-5xl mb-4">🌱</div>
+                            <h3 class="text-xl font-bold text-garden-secondary mb-3">Iniciante ou experiente?</h3>
+                            <p class="text-muted-foreground leading-relaxed">
+                                Não importa seu nível. <strong>Tem planta para quem nunca regou e para quem já tem horta
+                                    inteira.</strong>
+                            </p>
+                        </div>
+
+                        <!-- Card 3 – Luz solar -->
+                        <div
+                            class="bg-white rounded-2xl shadow-lg p-8 text-center border border-green-100 hover:shadow-xl transition-shadow">
+                            <div class="text-5xl mb-4">☀️</div>
+                            <h3 class="text-xl font-bold text-garden-secondary mb-3">Luz solar é essencial</h3>
+                            <p class="text-muted-foreground leading-relaxed">
+                                Todas as plantas precisam de luz. <strong>Quanto mais sol direto, mais opções.</strong>
+                                Pouca luz? Ainda tem várias que crescem bem.
+                            </p>
+                        </div>
+
                     </div>
 
-                    <!-- experiencia -->
-                    <div class="fade-in" style="animation-delay: 0.2s">
-                        <h2 class="text-xl font-semibold mb-4 text-garden-secondary">👩‍🌾 Seu nível de experiência</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <label class="option-card">
-                                <input type="radio" name="experiencia" value="iniciante" class="mr-2">
-                                <span class="font-semibold">Iniciante</span><br>
-                                <span class="text-muted-foreground text-sm">Primeira vez cuidando de plantas</span>
-                            </label>
-                            <label class="option-card">
-                                <input type="radio" name="experiencia" value="basico" class="mr-2">
-                                <span class="font-semibold">Básico</span><br>
-                                <span class="text-muted-foreground text-sm">Já cuidei de algumas plantas</span>
-                            </label>
-                            <label class="option-card">
-                                <input type="radio" name="experiencia" value="experiente" class="mr-2">
-                                <span class="font-semibold">Experiente</span><br>
-                                <span class="text-muted-foreground text-sm">Tenho bastante experiência com
-                                    plantas</span>
-                            </label>
-                        </div>
-                    </div>
 
-                    <!-- diponibilidde de luz -->
-                    <div class="fade-in" style="animation-delay: 0.3s">
-                        <h2 class="text-xl font-semibold mb-4 text-garden-secondary">☀️ Luz solar disponível</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <label class="option-card">
-                                <input type="radio" name="luz" value="sol-pleno" class="mr-2">
-                                <span class="font-semibold">Sol pleno</span><br>
-                                <span class="text-muted-foreground text-sm">Mais de 6 horas de sol direto</span>
-                            </label>
-                            <label class="option-card">
-                                <input type="radio" name="luz" value="meia-sombra" class="mr-2">
-                                <span class="font-semibold">Meia sombra</span><br>
-                                <span class="text-muted-foreground text-sm">3-6 horas de sol</span>
-                            </label>
-                            <label class="option-card">
-                                <input type="radio" name="luz" value="sombra" class="mr-2">
-                                <span class="font-semibold">Sombra</span><br>
-                                <span class="text-muted-foreground text-sm">Menos de 3 horas de sol</span>
-                            </label>
-                        </div>
-                    </div>
 
                     <!-- oq quer plantar -->
                     <div class="fade-in" style="animation-delay: 0.4s">
@@ -389,8 +360,15 @@
                                 <input type="checkbox" id="category-verduras" class="w-5 h-5 text-garden-primary" check>
                                 <span>🥬 Verduras</span>
                             </label>
+                            <label class="option-card">
+                                <input type="checkbox" id="category-legumes" class="w-5 h-5 text-garden-primary"
+                                    disabled>
+                                <span>🍅 legumes (em breve)</span>
+                            </label>
                         </div>
                     </div>
+                    <br>
+
 
                     <!-- btn final -->
                     <div class="text-center fade-in" style="animation-delay: 0.5s">
@@ -405,27 +383,29 @@
     </section>
 
     <script>
+
+
         document.addEventListener('DOMContentLoaded', function () {
-            // Elementos das páginas
+            // elementos das páginas
             const paginaInicial = document.getElementById('page-hero');
             const paginaNome = document.getElementById('page-name');
             const paginaInformacoes = document.getElementById('page-info');
 
-            // Botões de navegação
+            // botoes de navegacao
             const botaoComecar = document.getElementById('start-button');
             const botaoEnviarNome = document.getElementById('submit-name');
             const botaoVoltarNome = document.getElementById('back-to-name');
             const botaoFiltrarPlantas = document.getElementById('filter-plants');
 
-            // Dados do usuário
+            // dados do usuario
             const campoNomeUsuario = document.getElementById('user-name');
             const saudacaoUsuario = document.getElementById('user-greeting');
             const barraProgresso = document.getElementById('progress-fill');
 
-            // Cards de opções
+            // cards de opções
             const cartoesOpcoes = document.querySelectorAll('.option-card');
 
-            // Função: navegar entre páginas
+            // funcao: navegar entre paginas
             function navegarPara(pagina) {
                 document.querySelectorAll('.page').forEach(p => {
                     p.classList.remove('active');
@@ -434,7 +414,7 @@
                 atualizarBarraProgresso(pagina);
             }
 
-            // Função: atualizar a barra de progresso
+            // funcao: atualizar a barra de progresso
             function atualizarBarraProgresso(paginaAtual) {
                 if (paginaAtual === paginaInicial) {
                     barraProgresso.style.width = '0%';
@@ -445,23 +425,28 @@
                 }
             }
 
-            // Interatividade dos cards de opção
+            // interatividade dos cards de opcao
             cartoesOpcoes.forEach(cartao => {
                 const input = cartao.querySelector('input');
+
+                // clique no cartao
                 cartao.addEventListener('click', function () {
                     if (input.type === 'radio') {
+                        // desmarca outros radios do mesmo grupo
                         const nomeGrupo = input.getAttribute('name');
                         document.querySelectorAll(`input[name="${nomeGrupo}"]`).forEach(radio => {
                             radio.closest('.option-card').classList.remove('selected');
                         });
                     }
 
+                    // alterna selecao
                     if (input.type === 'checkbox') {
                         input.checked = !input.checked;
                     } else {
                         input.checked = true;
                     }
 
+                    // atualiza estilo do cartao
                     if (input.checked) {
                         cartao.classList.add('selected');
                     } else {
@@ -470,11 +455,12 @@
                 });
             });
 
-            // Eventos dos botões
+            // eventos dos botoes
             botaoComecar.addEventListener('click', function () {
                 navegarPara(paginaNome);
             });
 
+            // envia o nome e vai para a proxima pagina
             botaoEnviarNome.addEventListener('click', function () {
                 const nomeUsuario = campoNomeUsuario.value.trim();
                 if (nomeUsuario) {
@@ -485,44 +471,48 @@
                 }
             });
 
+            // volta para a pagina do nome
             botaoVoltarNome.addEventListener('click', function () {
                 navegarPara(paginaNome);
             });
 
             botaoFiltrarPlantas.addEventListener('click', function () {
-                // Coleta as informações do usuário
+                // coleta as informações do usuário
 
-                // Espaço disponível
+                // espaço disponivel
                 const espaco = document.querySelector('input[name="espaco"]:checked');
                 // Nível de experiência
                 const experiencia = document.querySelector('input[name="experiencia"]:checked');
-                // Luz solar disponível
+                // luz solar disponível
                 const luz = document.querySelector('input[name="luz"]:checked');
-                // Categorias de plantas - temperos
+                // categorias de plantas - temperos
                 const temperos = document.getElementById('category-temperos').checked;
-                // Categorias de plantas - verduras
+                // categorias de plantas - verduras
                 const verduras = document.getElementById('category-verduras').checked;
 
-                // Verifica se todas as informações obrigatórias foram preenchidas
-                if (!espaco || !experiencia || !luz) {
-                    //retorna um erro ao usuario
-                    alert('Por favor, preencha todas as informações sobre seu espaço e experiência.');
-                    return;
-                }
+                // resquicios de um plano mal feito, ou nao
+                // if (!espaco || !experiencia || !luz) {
+                //     //retorna um erro ao usuario
+                //     alert('Por favor, preencha todas as informações sobre seu espaço e experiência.');
+                //     return;
+                // }
 
-                // Prepara os dados do usuário
+                // prepara os dados do usuário
                 const dadosUsuario = {
                     nome: campoNomeUsuario.value.trim(),
-                    espaco: espaco.value,
-                    experiencia: experiencia.value,
-                    luz: luz.value,
+
+                    //resquicios de um plano mal feito, dnovo
+                    // espaco: espaco.value,
+                    // experiencia: experiencia.value,
+                    // luz: luz.value,
+
                     categorias: {
                         temperos: temperos,
                         verduras: verduras
                     }
                 };
 
-                // Redireciona para a página de opções de plantas com os dados
+                // redireciona para a página de opções de plantas com os dados
                 const parametros = new URLSearchParams({
                     data: encodeURIComponent(JSON.stringify(dadosUsuario))
                 }).toString();
@@ -530,7 +520,7 @@
                 window.location.href = `opcoes.html?${parametros}`;
             });
 
-            // Permite enviar o nome pressionando Enter
+            // permite enviar o nome pressionando Enter
             campoNomeUsuario.addEventListener('keypress', function (e) {
                 if (e.key === 'Enter') {
                     botaoEnviarNome.click();
